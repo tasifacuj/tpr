@@ -6,13 +6,23 @@ namespace tpr {
 	class GradientDescent {
 	public: // == TYPES ==
 		using ValueType = ValueT;
-		using GradientContainerT = std::array<ValueType, VarSize>;
+		using VectorContainerT = std::array<ValueType, VarSize>;
 	public: // == CONSTANTS == 
-		static constexpr float Epsilon = 1e-5;
-		static constexpr float Lambda = 1.0f;
+		static constexpr ValueT Epsilon = 1e-5;
+		static constexpr ValueT Lambda = 1.0f;
+		static constexpr size_t MaxIterations = 100'000;
 	public:
-		static void calculate(F f, GradientF grad, const GradientContainerT& x0) {
-			GradientContainerT old, current = x0;
+		static void calculate(F f, GradientF gradF, const GradientContainerT& x0) {
+			VectorContainerT oldVec;
+			VectorContainerT currentVec = x0;
+
+			for (size_t it = 0; it < MaxIterations; it++) {
+				oldVec = currentVec;
+				VectorContainerT gradientVec = gradF.get();
+
+				for( size_t j = 0; j < VarSize; j++ )
+					currentVec[ j ] = currentVec[j] - Lambda * 
+			}
 		}
 	};
 }

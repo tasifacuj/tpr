@@ -5,29 +5,220 @@
 #include "GradientDescent.hpp"
 
 namespace tpr {
-	
+	/*template<typename ValueType, typename VectorT, typename GFuncT, int N>
+	struct WrapGi;
+
+	template<typename ValueType, typename VectorT, typename GFuncT>
+	struct WrapGi<ValueType, VectorT, GFuncT, 1> {
+		using ApplyF = &GFuncT::apply;
+
+		template<ApplyF g1>
+		struct R1
+		{
+			static ValueType apply(const VectorT& xArgs) {
+				return std::pow(std::max(0, -1 * g1(xArgs)), P);
+			}
+		};
+	};
+
+	template<typename ValueType, typename VectorT, typename GFuncT>
+	struct WrapGi<ValueType, VectorT, GFuncT, 2> {
+		using ApplyF = &GFuncT::apply;
+		template<
+			ApplyF g1,
+			ApplyF g2
+		>
+		struct R1
+		{
+			static ValueType apply(const VectorT& xArgs) {
+				return std::pow(std::max(0, -1 * g1(xArgs)), P) + std::pow(std::max(0, -1 * g2(xArgs)), P);
+			}
+		};
+	};
+
+	template<typename ValueType, typename VectorT, typename GFuncT>
+	struct WrapGi<ValueType, VectorT, GFuncT, 3> {
+		using ApplyF = &GFuncT::apply;
+		template<
+			ApplyF g1,
+			ApplyF g2,
+			ApplyF g3
+		>
+			struct R1
+		{
+			static ValueType apply(const VectorT& xArgs) {
+				return std::pow(std::max(0, -1 * g1(xArgs)), P) + std::pow(std::max(0, -1 * g2(xArgs)), P) + std::pow(std::max(0, -1 * g3(xArgs)), P);
+			}
+		};
+	};
+
+	template<typename ValueType, typename VectorT, typename GFuncT>
+	struct WrapGi<ValueType, VectorT, GFuncT, 4> {
+		using ApplyF = &GFuncT::apply;
+		template<
+			ApplyF g1,
+			ApplyF g2,
+			ApplyF g3,
+			ApplyF g4
+		>
+			struct R1
+		{
+			static ValueType apply(const VectorT& xArgs) {
+				return std::pow(std::max(0, -1 * g1(xArgs)), P) + std::pow(std::max(0, -1 * g2(xArgs)), P) + std::pow(std::max(0, -1 * g3(xArgs)), P) + std::pow(std::max(0, -1 * g4(xArgs)), P);
+			}
+		};
+	};
+
+	template<typename ValueType, typename VectorT, typename GFuncT>
+	struct WrapGi<ValueType, VectorT, GFuncT, 5> {
+		using ApplyF = &GFuncT::apply;
+		template<
+			ApplyF g1,
+			ApplyF g2,
+			ApplyF g3,
+			ApplyF g4,
+			ApplyF g5
+		>
+			struct R1
+		{
+			static ValueType apply(const VectorT& xArgs) {
+				return std::pow(std::max(0, -1 * g1(xArgs)), P) 
+					+ std::pow(std::max(0, -1 * g2(xArgs)), P) 
+					+ std::pow(std::max(0, -1 * g3(xArgs)), P) 
+					+ std::pow(std::max(0, -1 * g4(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g5(xArgs)), P)
+					;
+			}
+		};
+	};
+
+	template<typename ValueType, typename VectorT, typename GFuncT>
+	struct WrapGi<ValueType, VectorT, GFuncT, 6> {
+		using ApplyF = &GFuncT::apply;
+		template<
+			ApplyF g1,
+			ApplyF g2,
+			ApplyF g3,
+			ApplyF g4,
+			ApplyF g5,
+			ApplyF g6
+		>
+			struct R1
+		{
+			static ValueType apply(const VectorT& xArgs) {
+				return std::pow(std::max(0, -1 * g1(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g2(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g3(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g4(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g5(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g6(xArgs)), P)
+					;
+			}
+		};
+	};
+
+	template<typename ValueType, typename VectorT, typename GFuncT>
+	struct WrapGi<ValueType, VectorT, GFuncT, 7> {
+		using ApplyF = &GFuncT::apply;
+		template<
+			ApplyF g1,
+			ApplyF g2,
+			ApplyF g3,
+			ApplyF g4,
+			ApplyF g5,
+			ApplyF g6,
+			ApplyF g7
+		>
+			struct R1
+		{
+			static ValueType apply(const VectorT& xArgs) {
+				return std::pow(std::max(0, -1 * g1(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g2(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g3(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g4(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g5(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g6(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g7(xArgs)), P)
+					;
+			}
+		};
+	};
+
+	template<typename ValueType, typename VectorT, typename GFuncT>
+	struct WrapGi<ValueType, VectorT, GFuncT, 8> {
+		using ApplyF = &GFuncT::apply;
+		template<
+			ApplyF g1,
+			ApplyF g2,
+			ApplyF g3,
+			ApplyF g4,
+			ApplyF g5,
+			ApplyF g6,
+			ApplyF g7,
+			ApplyF g8
+		>
+			struct R1
+		{
+			static ValueType apply(const VectorT& xArgs) {
+				return std::pow(std::max(0, -1 * g1(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g2(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g3(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g4(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g5(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g6(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g7(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g8(xArgs)), P)
+					;
+			}
+		};
+	};
+
+	template<typename ValueType, typename VectorT, typename GFuncT>
+	struct WrapGi<ValueType, VectorT, GFuncT, 9> {
+		using ApplyF = &GFuncT::apply;
+		template<
+			ApplyF g1,
+			ApplyF g2,
+			ApplyF g3,
+			ApplyF g4,
+			ApplyF g5,
+			ApplyF g6,
+			ApplyF g7,
+			ApplyF g8,
+			ApplyF g9
+		>
+			struct R1
+		{
+			static ValueType apply(const VectorT& xArgs) {
+				return std::pow(std::max(0, -1 * g1(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g2(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g3(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g4(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g5(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g6(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g7(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g8(xArgs)), P)
+					+ std::pow(std::max(0, -1 * g9(xArgs)), P)
+					;
+			}
+		};
+	};*/
+
 	/**
 	 * @brief penalty function algorithm
 	 * F(x, r[k]) = f(x) + r[k] * alpha(x) -> min
 	 */
 	template<
 		typename FT, //minimizing function
-		typename IndexType,
-		IndexType GSize,
-		IndexType HSize
+		typename IndexType
 	>
 	class PenaltyFunction {
 	public: // == TYPES ==
 		using TargetF = FT;
 		using ValueType = typename TargetF::ValueType;
 		using VectorT	= typename TargetF::VectorT;
-
-		//FIXME: make with variadic templates!!!!!
-		using GType = std::function<ValueType(const VectorType&)>;// !< gi(x) >= 0
-		using HType = std::function<ValueType(const VectorType&)>;// !< hi(x) == 0
-		using GArray = std::array<GTypem, GSize>;
-		using HArray = std::array<HType HSize>;
-
+		using GType = std::function<ValueType(const VectorT&)>;
+		using HType = std::function<ValueType(const VectorT&)>;
 	public: // == CONSTANTS ==
 		static constexpr ValueType	Beta	= 2;	//!< growth factor.
 		static constexpr ValueType	Epsilon	= 1e-5f;//!< accuracy
@@ -36,10 +227,11 @@ namespace tpr {
 
 	public: // == TYPES ==
 		// R1(gi(x)) = max( 0, -gi( x ) )^p
+
 		struct R1 {
 			const GType& gfunc;
 
-			R1( const GType& g ) : gfunc( g ){}
+			R1(const GType& g) : gfunc(g) {}
 
 			static ValueType apply( const VectorT& xArgs ) {
 				return std::pow(std::max(0, -1 * gfunc(xArgs)), P );
@@ -101,7 +293,7 @@ namespace tpr {
 		public:
 			const AlphaFunc&	alpha_;
 		public: // == CTOR ==
-			F(const AlphaFunc&	alpha) : alpha_(alpha);
+			F(const AlphaFunc&	alpha) : alpha_(alpha) {}
 		public: // == METHODS ==
 			ValueType apply(const VectorT& xArgs) {
 				return TargetF::apply(xArgs) + alpha_.apply( xArgs );

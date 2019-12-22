@@ -23,6 +23,7 @@ public: // == METHODS ==
 	}
 
 	static VectorT gradient( const VectorT& args ) {
+		// 20 * x1 + 2 * x2
 		VectorT tmp;
 		tmp[ 0 ] = 20 * args[0];
 		tmp[ 1 ] = 2 * args[ 1 ];

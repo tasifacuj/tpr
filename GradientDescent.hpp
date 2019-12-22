@@ -3,6 +3,7 @@
 #include <cassert>
 
 namespace tpr {
+	// when implementing fast descent use CRTP for fast impl/split impl
 	template< typename F,
 		typename IndexType = size_t
 	>

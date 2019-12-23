@@ -42,7 +42,11 @@ namespace tpr {
 
 				// select lambda from next condition:
 				// f( x[k+1] ) = f( x[k] ) - lambda[k] * grad(f[ x[ k ] ]) <= f(x[k]) - eps * lambda[k] * || grad( f( x[k] ) )|| ^ 2
-				while (F::apply(currentXVec) > F::apply(oldXVec) - SplitEps * lambda * squaredNorm) {
+				
+
+				while (F::apply(currentXVec) > (F::apply(oldXVec) - SplitEps * lambda * squaredNorm) ) {
+					auto f1 = F::apply(currentXVec);
+					auto f2 = F::apply(oldXVec) - SplitEps * lambda * squaredNorm;
 					lambda = SplitDelta * lambda;
 					currentXVec = oldXVec;
 
@@ -51,9 +55,17 @@ namespace tpr {
 				}
 
 				ValueType diff = std::fabs(F::apply(currentXVec) - F::apply(oldXVec));
-
-				if (diff < Epsilon)
+				if(diff < Epsilon)
 					return currentXVec;
+				//squaredNorm = 0;
+				
+				/*for (size_t j = 0; j < oldXVec.size(); j++)
+					squaredNorm += (oldXVec[j] - currentXVec[j])*(oldXVec[j] - currentXVec[j]);
+				
+				squaredNorm = std::sqrt(squaredNorm);
+
+				if (squaredNorm < Epsilon)
+					return currentXVec;*/
 			}// for
 
 			assert(0 && "Failed");

@@ -66,13 +66,13 @@ struct G1 {
 	using VectorT = std::array<ValueType, N>;
 
 	static ValueType apply(const VectorT& args) {
-		return 3 * args[0] + 2 * args[1] - 6;
+		return -3.0f * args[0] - 2 * args[1] + 6;
 	}
 
 	static VectorT gradient(const VectorT&) {
 		VectorT tmp;
-		tmp[0] = 3;
-		tmp[1] = 2;
+		tmp[0] = -3.0f;
+		tmp[1] = -2.0;
 		return tmp;
 	}
 };
@@ -88,13 +88,13 @@ struct G2 {
 	using VectorT = std::array<ValueType, N>;
 
 	static ValueType apply(const VectorT& args) {
-		return  args[0] - args[1] + 3;
+		return  -1.0f * args[0] + args[1] - 3.0f;
 	}
 
 	static VectorT gradient(const VectorT&) {
 		VectorT tmp;
-		tmp[0] = 1;
-		tmp[1] = -1;
+		tmp[0] = -1.0f;
+		tmp[1] = 1.0f;
 		return tmp;
 	}
 };
@@ -110,13 +110,13 @@ struct G3 {
 	using VectorT = std::array<ValueType, N>;
 
 	static ValueType apply(const VectorT& args) {
-		return  -1 * args[0] - args[1] + 7;
+		return   1.0f * args[0] + args[1] - 7;
 	}
 
 	static VectorT gradient(const VectorT&) {
 		VectorT tmp;
-		tmp[0] = -1;
-		tmp[1] = -1;
+		tmp[0] = 1.0f;
+		tmp[1] = 1.0f;
 		return tmp;
 	}
 };
@@ -132,19 +132,19 @@ struct G4 {
 	using VectorT = std::array<ValueType, N>;
 
 	static ValueType apply(const VectorT& args) {
-		return  (-2.0f / 3.0f) * args[0] + args[1] + 4.0f/3.0f;
+		return  (2.0f / 3.0f) * args[0] - args[1] - ( 4.0f/3.0f);
 	}
 
 	static VectorT gradient(const VectorT&) {
 		VectorT tmp;
-		tmp[0] = -2.0f / 3.0f;
-		tmp[1] = 1;
+		tmp[0] = ( 2.0f / 3.0f);
+		tmp[1] = -1.0f;
 		return tmp;
 	}
 };
 
 int main() {
-	/*using F = QuadF<>;
+	using F = QuadF<>;
 	using GradientDescent = tpr::StepSplitGradientDescent<F>;
 	using Vec = typename F::VectorT;
 	Vec x0{ 10.0f, 10.0f };
@@ -156,10 +156,10 @@ int main() {
 	
 	for (size_t i = 0; i < result.size(); i++)
 		std::cerr << result[i] << ' ';
-	std::cerr << std::endl << "Number of iterations:" << it << std::endl;*/
+	std::cerr << std::endl << "Number of iterations:" << it << std::endl;
 
-	using PF = tpr::PenaltyFunction<Fx, size_t, G1, G2, G3, G4> ;
+	/*using PF = tpr::PenaltyFunction<Fx, size_t, G1, G2, G3, G4> ;
 	PF::VectorT x0{ 6.0f, 7.0f };
-	PF::VectorT xOpt = PF::evaluate(x0);
+	PF::VectorT xOpt = PF::evaluate(x0);*/
 	return 0;
 }

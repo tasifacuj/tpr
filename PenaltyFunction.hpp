@@ -117,11 +117,11 @@ namespace tpr {
 		using Alpha = AlphaFunc<ValueType, VectorT, R1Sum>;
 
 	public: // == CONSTANTS ==
-		static constexpr ValueType	Beta	= 2;	//!< growth factor.
-		static constexpr ValueType	Epsilon	= 1e-4f;//!< accuracy
-		static constexpr ValueType	Rk		= 0.5f; //!< positive constant
-		static constexpr IndexType	N		= TargetF::N;
-		static constexpr IndexType	MaxPIterations = 100'000;
+		static constexpr ValueType	Beta			= 2.0f;	//!< growth factor.
+		static constexpr ValueType	Epsilon			= 1e-4f;//!< accuracy
+		static constexpr ValueType	DefaultRk		= 0.5f; //!< positive constant
+		static constexpr IndexType	N				= TargetF::N;
+		static constexpr IndexType	MaxPIterations	= 100'000;
 
 		static ValueType	sRk;
 
@@ -167,7 +167,7 @@ namespace tpr {
 
 	public: // == METHODS ==
 		static VectorT evaluate(const VectorT& x0) {
-			ThisT::sRk = Rk;
+			ThisT::sRk = DefaultRk;
 			VectorT xArgs = x0;
 			// prepare new penalty function
 			using FxRk = FxRkFunction<ValueType, VectorT, TargetF, Alpha>;
@@ -180,8 +180,9 @@ namespace tpr {
 
 				// find min( F(x, rk) )
 				VectorT xOptLoc = GradientDescent::calculate(xArgs, GradientDescent::Lambda, it);
+				ValueType eps = std::fabs(TargetF::apply(xOptLoc) - TargetF::apply(xArgs));
 
-				if (ThisT::sRk * Alpha::apply(xOptLoc) <= Epsilon) {
+				if (eps <= Epsilon) {
 					return xOptLoc;
 				}else {
 					// r[k+1] = r[k] * B

@@ -32,6 +32,33 @@ namespace tpr {
 		using VectorT	= typename TargetF::VectorT;
 		using ThisT		= PenaltyFunction<FT, IndexType, GiFuncTypes ...>;
 
+		template<typename VecT, int N>
+		struct InitArray;
+
+		template<typename VecT>
+		struct InitArray<VecT, 1> {
+			void initialize(VecT& v) {
+				v[0] = typename VecT::value_type();
+			}
+		};
+
+		template<typename VecT>
+		struct InitArray<VecT, 2> {
+			void initialize(VecT& v) {
+				v[0] = typename VecT::value_type();
+				v[1] = typename VecT::value_type();
+			}
+		};
+
+		template<typename VecT>
+		struct InitArray<VecT, 3> {
+			void initialize(VecT& v) {
+				v[0] = typename VecT::value_type();
+				v[1] = typename VecT::value_type();
+				v[2] = typename VecT::value_type();
+			}
+		};
+
 		template<typename ValueT, typename VecT, int PParam, typename G, typename... GiFuncTypes>
 		struct R1 : R1<ValueT, VecT, PParam, G>
 			, R1< ValueT, VecT, PParam, GiFuncTypes ... > {
@@ -42,7 +69,8 @@ namespace tpr {
 			}
 
 			static VecT gradient(const VecT& xArgs) {
-				ValueT v = std::pow(std::max(0.0, 1.0 * G::apply(xArgs)), PParam);
+				ValueT f = G::apply(xArgs);
+				ValueT v = std::pow(std::max(0.0, 1.0 * f), PParam);
 				VecT g;
 				memset(&g[0], 0, sizeof(ValueT) * g.size());
 
@@ -54,7 +82,7 @@ namespace tpr {
 					g = G::gradient(xArgs);
 					
 					for (IndexType idx = 0; idx < g.size(); idx++) {
-						g[idx] = PParam * std::pow(1.0 * G::apply(xArgs), PParam - 1) * std::pow(g[idx], PParam - 1);
+						g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * std::pow(g[idx], PParam - 1);
 					}
 				}
 				
@@ -76,7 +104,8 @@ namespace tpr {
 			}
 
 			static VecT gradient(const VecT& xArgs) {
-				ValueT v = std::pow(std::max(0.0, 1.0 * G::apply(xArgs)), PParam);
+				ValueT f = G::apply(xArgs);
+				ValueT v = std::pow(std::max(0.0, 1.0 * f), PParam);
 				VecT g;
 				memset(&g[0], 0, sizeof(ValueT) * g.size());
 
@@ -88,7 +117,7 @@ namespace tpr {
 					VecT g = G::gradient(xArgs);
 
 					for (IndexType idx = 0; idx < g.size(); idx++) {
-						g[idx] = PParam * std::pow(-1 * G::apply(xArgs), PParam - 1) * std::pow(g[idx], PParam - 1);
+						g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * std::pow(g[idx], PParam - 1);
 					}
 				}
 

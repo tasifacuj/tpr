@@ -38,11 +38,11 @@ namespace tpr {
 			using Tail = R1< ValueT, VecT, PParam, GiFuncTypes ... >;
 
 			static ValueT apply(const VecT& xArgs) {
-				return std::pow(std::max(0.0, double(-1.0 * G::apply(xArgs))), PParam) + Tail::apply(xArgs);
+				return std::pow(std::max(0.0, double(1.0 * G::apply(xArgs))), PParam) + Tail::apply(xArgs);
 			}
 
 			static VecT gradient(const VecT& xArgs) {
-				ValueT v = std::pow(std::max(0.0, -1.0 * G::apply(xArgs)), PParam);
+				ValueT v = std::pow(std::max(0.0, 1.0 * G::apply(xArgs)), PParam);
 
 				if (v > 0) {
 					/**
@@ -72,11 +72,11 @@ namespace tpr {
 		template<typename ValueT, typename VecT, int PParam, typename G>
 		struct R1<ValueT, VecT, PParam, G> {
 			static ValueT apply(const VecT& xArgs) {
-				return std::pow(std::max(0.0, -1.0 * G::apply(xArgs)), PParam );
+				return std::pow(std::max(0.0, 1.0 * G::apply(xArgs)), PParam );
 			}
 
 			static VecT gradient(const VecT& xArgs) {
-				ValueT v = std::pow(std::max(0.0, -1.0 * G::apply(xArgs)), PParam);
+				ValueT v = std::pow(std::max(0.0, 1.0 * G::apply(xArgs)), PParam);
 
 				if (v > 0) {
 					/**

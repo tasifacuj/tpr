@@ -56,9 +56,10 @@ struct Fx {
 };
 
 /**
+ * g1(x) = -3x1 - 2x2 + 6 <= 0
  * g1(x) = 3x1 + 2x2 - 6 >= 0
- * dfdx1 = 3
- * dfdx2 = 2
+ * dfdx1 = -3
+ * dfdx2 = -2
  */
 struct G1 {
 	static constexpr size_t N = 2;
@@ -78,9 +79,10 @@ struct G1 {
 };
 
 /**
+ * g2(x) = -x1 + x2 - 3 <= 0
  * g2(x) = x1 - x2 + 3 >= 0
- * dfdx1 = 1
- * dfdx2 = -1
+ * dfdx1 = -1
+ * dfdx2 = 1
  */
 struct G2 {
 	static constexpr size_t N = 2;
@@ -100,9 +102,10 @@ struct G2 {
 };
 
 /**
+ * g3(x) = x1 + x2 - 7 <= 0
  * g3(x) = -x1 - x2 + 7 >= 0
- * dfdx1 = -1
- * dfdx2 = -1
+ * dfdx1 = 1
+ * dfdx2 = 1
  */
 struct G3 {
 	static constexpr size_t N = 2;
@@ -115,16 +118,17 @@ struct G3 {
 
 	static VectorT gradient(const VectorT&) {
 		VectorT tmp;
-		tmp[0] = 1.0f;
-		tmp[1] = 1.0f;
+		tmp[0] = -1.0f;
+		tmp[1] = -1.0f;
 		return tmp;
 	}
 };
 
 /**
+ * g4(x) = (2/3)x1 - x2 - 4/3 <= 0
  * g4(x) = -(2/3)x1 + x2 + 4/3 >= 0
- * dfdx1 = -2/3
- * dfdx2 = 1
+ * dfdx1 = 2/3
+ * dfdx2 = -1
  */
 struct G4 {
 	static constexpr size_t N = 2;
@@ -144,7 +148,7 @@ struct G4 {
 };
 
 int main() {
-	using F = QuadF<>;
+	/*using F = QuadF<>;
 	using GradientDescent = tpr::StepSplitGradientDescent<F>;
 	using Vec = typename F::VectorT;
 	Vec x0{ 10.0f, 10.0f };
@@ -156,10 +160,10 @@ int main() {
 	
 	for (size_t i = 0; i < result.size(); i++)
 		std::cerr << result[i] << ' ';
-	std::cerr << std::endl << "Number of iterations:" << it << std::endl;
+	std::cerr << std::endl << "Number of iterations:" << it << std::endl;*/
 
-	/*using PF = tpr::PenaltyFunction<Fx, size_t, G1, G2, G3, G4> ;
+	using PF = tpr::PenaltyFunction<Fx, size_t, G1, G2, G3, G4> ;
 	PF::VectorT x0{ 6.0f, 7.0f };
-	PF::VectorT xOpt = PF::evaluate(x0);*/
+	PF::VectorT xOpt = PF::evaluate(x0);
 	return 0;
 }

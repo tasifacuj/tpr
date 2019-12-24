@@ -47,9 +47,10 @@ struct Fx {
 	}
 
 	static VectorT gradient(const VectorT& args) {
-		// 20 * x1 + 2 * x2
 		VectorT tmp;
+		// dfdx1 = 2( x1 - 6 )
 		tmp[0] = 2 * (args[0] - 6);
+		// dfdx2 = 2(x2 - 7)
 		tmp[1] = 2 * (args[1] - 7);
 		return tmp;
 	}
@@ -67,13 +68,17 @@ struct G1 {
 	using VectorT = std::array<ValueType, N>;
 
 	static ValueType apply(const VectorT& args) {
+		auto vvv = -3.0f * args[0] - 2 * args[1] + 6;
 		return -3.0f * args[0] - 2 * args[1] + 6;
+		//return 3.0f * args[0] + 2 * args[1] - 6;
 	}
 
 	static VectorT gradient(const VectorT&) {
 		VectorT tmp;
 		tmp[0] = -3.0f;
 		tmp[1] = -2.0;
+		/*tmp[0] = 3.0f;
+		tmp[1] = 2.0;*/
 		return tmp;
 	}
 };
@@ -90,13 +95,17 @@ struct G2 {
 	using VectorT = std::array<ValueType, N>;
 
 	static ValueType apply(const VectorT& args) {
+		auto vvv = -1.0f * args[0] + args[1] - 3.0f;
 		return  -1.0f * args[0] + args[1] - 3.0f;
+		//return  1.0f * args[0] - args[1] + 3.0f;
 	}
 
 	static VectorT gradient(const VectorT&) {
 		VectorT tmp;
 		tmp[0] = -1.0f;
 		tmp[1] = 1.0f;
+		/*tmp[0] = 1.0f;
+		tmp[1] = -1.0f;*/
 		return tmp;
 	}
 };
@@ -113,13 +122,17 @@ struct G3 {
 	using VectorT = std::array<ValueType, N>;
 
 	static ValueType apply(const VectorT& args) {
+		auto vvv = 1.0f * args[0] + args[1] - 7;
 		return   1.0f * args[0] + args[1] - 7;
+		//return   -1.0f * args[0] - args[1] + 7;
 	}
 
 	static VectorT gradient(const VectorT&) {
 		VectorT tmp;
-		tmp[0] = -1.0f;
-		tmp[1] = -1.0f;
+		tmp[0] = 1.0f;
+		tmp[1] = 1.0f;
+		/*tmp[0] = -1.0f;
+		tmp[1] = -1.0f;*/
 		return tmp;
 	}
 };
@@ -136,6 +149,7 @@ struct G4 {
 	using VectorT = std::array<ValueType, N>;
 
 	static ValueType apply(const VectorT& args) {
+		auto vvv = (2.0f / 3.0f) * args[0] - args[1] - (4.0f / 3.0f);
 		return  (2.0f / 3.0f) * args[0] - args[1] - ( 4.0f/3.0f);
 	}
 

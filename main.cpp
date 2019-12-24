@@ -161,6 +161,9 @@ struct G4 {
 	}
 };
 
+
+
+
 int main() {
 	/*using F = QuadF<>;
 	using GradientDescent = tpr::StepSplitGradientDescent<F>;

@@ -82,7 +82,7 @@ namespace tpr {
 					g = G::gradient(xArgs);
 					
 					for (IndexType idx = 0; idx < g.size(); idx++) {
-						g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * std::pow(g[idx], PParam - 1);
+						g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * g[idx];
 					}
 				}
 				
@@ -117,7 +117,7 @@ namespace tpr {
 					VecT g = G::gradient(xArgs);
 
 					for (IndexType idx = 0; idx < g.size(); idx++) {
-						g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * std::pow(g[idx], PParam - 1);
+						g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * g[idx];
 					}
 				}
 

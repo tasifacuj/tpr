@@ -210,6 +210,27 @@ namespace subj_17 {
 		{ 332, 17 },
 	};
 
+	static std::map<int, int> index_to_model_index{
+		{ 0, 111 },
+		{ 1, 112 },
+		{ 2, 121 },
+		{ 3, 122 },
+		{ 4, 131 },
+		{ 5, 132 },
+		{ 6, 211 },
+		{ 7, 212 },
+		{ 8, 221 },
+		{ 9, 222 },
+		{ 10, 231 },
+		{ 11, 232 },
+		{ 12, 311 },
+		{ 13, 312 },
+		{ 14, 321 },
+		{ 15, 322 },
+		{ 16, 331 },
+		{ 17, 332 },
+	};
+
 	static constexpr double FLaplassInverse = 1.282;
 
 	template<typename T>
@@ -427,7 +448,124 @@ namespace subj_17 {
 
 		}
 	};
-}
+
+	/**
+	 * g4(x) = 5.0x212 + 1.5x222 + 5.0*x232 + 1.282* sqrt( 1.33 * x212^2 + 0.083*x222^2 + 0.33*x232^2 ) - 200 <= 0
+	 */
+	struct G4 {
+		static constexpr size_t N = 18;
+		using ValueType = double;
+		using VectorT = std::array<ValueType, N>;
+
+		// g4(x) = 5.0x212 + 1.5x222 + 5.0*x232 + 1.282* sqrt( 1.33 * x212^2 + 0.083*x222^2 + 0.33*x232^2 ) - 200 <= 0
+		static ValueType apply(const VectorT& args) {
+			return 5.0 * args[model_index_to_index[212]] + 1.5 * args[model_index_to_index[222]] + 5.0 * args[model_index_to_index[232]]
+				+ FLaplassInverse * std::sqrt(
+					1.33 * sqr(args[model_index_to_index[212]])
+					+ 0.083 * sqr(args[model_index_to_index[222]])
+					+ 0.33 * sqr(args[model_index_to_index[232]])
+				) - 200.0;
+		}
+
+		/**
+		 * g4(x) = 5.0x212 + 1.5x222 + 5.0*x232 + 1.282* sqrt( 1.33 * x212^2 + 0.083*x222^2 + 0.33*x232^2 ) - 200 <= 0
+		 * v[7]:  dg3/dx212 = 5 + 1.282 * 0.5 * ( 1.33 * x212^2 + 0.083*x222^2 + 0.33*x232^2 )^( -0.5 ) * 2 * 1.33x212
+		 * v[9]:  dg3/dx222 = 1.5 + 1.282 * 0.5 * ( 1.33 * x212^2 + 0.083*x222^2 + 0.33*x232^2 )^( -0.5 ) * 2 * 0.083x222
+		 * v[11]: dg3/dx232 = 5 + 1.282 * 0.5 * ( 1.33 * x212^2 + 0.083*x222^2 + 0.33*x232^2 )^( -0.5 ) * 2 * 0.33x232
+		 */
+		static VectorT gradient(const VectorT& xargs) {
+			VectorT grad;
+			memset(&grad[0], 0, sizeof(ValueType) * N);
+			//x212
+			grad[model_index_to_index[ 212 ]] = (5.0 + FLaplassInverse * 0.5
+				* std::pow(
+					(1.33 * sqr(xargs[model_index_to_index[212]]) + 0.083 * sqr(xargs[model_index_to_index[222]]) + 0.33 * sqr(xargs[model_index_to_index[232]])),
+					-0.5
+					)
+				)
+				* 2 * 1.33 * xargs[model_index_to_index[212]];
+			// 222
+			grad[model_index_to_index[222]] = (1.5 + FLaplassInverse * 0.5
+				* std::pow(
+					(1.33 * sqr(xargs[model_index_to_index[212]]) + 0.083 * sqr(xargs[model_index_to_index[222]]) + 0.33 * sqr(xargs[model_index_to_index[232]])),
+					-0.5
+					)
+				)
+				* 2 * 0.083 * xargs[model_index_to_index[222]];
+
+			// 232
+			grad[model_index_to_index[232]] = (5.0 + FLaplassInverse * 0.5
+				* std::pow(
+					(1.33 * sqr(xargs[model_index_to_index[212]]) + 0.083 * sqr(xargs[model_index_to_index[222]]) + 0.33 * sqr(xargs[model_index_to_index[232]])),
+					-0.5
+					)
+				)
+				* 2 * 0.33 * xargs[model_index_to_index[232]];
+			return grad;
+
+		}
+	};
+
+	/**
+	 * g5(x) = 2.5 * x311 + 2.0 * x321 + 2.0 * x331 + 1.282 * sqrt( 0.75 * x311^2 + 0.33*x321^2 + 0.33*x331^2 ) - 240 <= 0
+	 */
+	struct G5 {
+		static constexpr size_t N = 18;
+		using ValueType = double;
+		using VectorT = std::array<ValueType, N>;
+
+		// g5(x) = 2.5 * x311 + 2.0 * x321 + 2.0 * x331 + 1.282 * sqrt( 0.75 * x311^2 + 0.33*x321^2 + 0.33*x331^2 ) - 240 <= 0
+		static ValueType apply(const VectorT& args) {
+			return 2.5 * args[model_index_to_index[311]] + 2.0 * args[model_index_to_index[321]] + 2.0 * args[model_index_to_index[331]]
+				+ FLaplassInverse * std::sqrt(
+					0.75 * sqr(args[model_index_to_index[311]])
+					+ 0.33 * sqr(args[model_index_to_index[321]])
+					+ 0.33 * sqr(args[model_index_to_index[331]])
+				) - 240.0;
+		}
+
+		/**
+		 * g5(x) = 2.5 * x311 + 2.0 * x321 + 2.0 * x331 + 1.282 * sqrt( 0.75 * x311^2 + 0.33*x321^2 + 0.33*x331^2 ) - 240 <= 0
+		 * v[12]:  dg3/dx311 = 2.5 + 1.282 * 0.5 * ( 0.75 * x311^2 + 0.33*x321^2 + 0.33*x331^2 )^-0.5 * 2 * 0.75 * x311
+		 * v[14]:  dg3/dx321 = 2.0 + 1.282 * 0.5 * ( 0.75 * x311^2 + 0.33*x321^2 + 0.33*x331^2 )^-0.5 * 2 * 0.33 * x321
+		 * v[16]:  dg3/dx331 = 2.0 + 1.282 * 0.5 * ( 0.75 * x311^2 + 0.33*x321^2 + 0.33*x331^2 )^-0.5 * 2 * 0.33 * x331
+		 */
+		static VectorT gradient(const VectorT& xargs) {
+			VectorT grad;
+			memset(&grad[0], 0, sizeof(ValueType) * N);
+			//x311
+			grad[model_index_to_index[311]] = (2.5 + FLaplassInverse * 0.5
+				* std::pow(
+					(0.75 * sqr(xargs[model_index_to_index[311]]) + 0.33 * sqr(xargs[model_index_to_index[321]]) + 0.33 * sqr(xargs[model_index_to_index[331]])),
+					-0.5
+					)
+				)
+				* 2 * 0.75 * xargs[model_index_to_index[311]];
+			// 321
+			grad[model_index_to_index[321]] = (2.0 + FLaplassInverse * 0.5
+				* std::pow(
+					(0.75 * sqr(xargs[model_index_to_index[311]]) + 0.33 * sqr(xargs[model_index_to_index[321]]) + 0.33 * sqr(xargs[model_index_to_index[331]])),
+					-0.5
+					)
+				)
+				* 2 * 0.33 * xargs[model_index_to_index[321]];
+
+			// 331
+			grad[model_index_to_index[331]] = (2.0 + FLaplassInverse * 0.5
+				* std::pow(
+					(0.75 * sqr(xargs[model_index_to_index[311]]) + 0.33 * sqr(xargs[model_index_to_index[321]]) + 0.33 * sqr(xargs[model_index_to_index[331]])),
+					-0.5
+					)
+				)
+				* 2 * 0.33 * xargs[model_index_to_index[331]];
+			return grad;
+
+		}
+	};
+
+
+
+}// namespace subj_17
 
 int main() {
 	assert(subj_17::model_index_to_index.size() == 18);

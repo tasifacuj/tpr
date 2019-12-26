@@ -83,6 +83,7 @@ namespace tpr {
 					
 					for (IndexType idx = 0; idx < g.size(); idx++) {
 						g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * g[idx];
+						//g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * std::pow(g[idx], PParam -1);
 					}
 				}
 				
@@ -118,6 +119,7 @@ namespace tpr {
 
 					for (IndexType idx = 0; idx < g.size(); idx++) {
 						g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * g[idx];
+						//g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * std::pow(g[idx], PParam -1);
 					}
 				}
 

@@ -7,5 +7,6 @@
     <ClInclude Include="GradientDescent.hpp" />
     <ClInclude Include="PenaltyFunction.hpp" />
     <ClInclude Include="subj_17.hpp" />
+    <ClInclude Include="TrainingModel.hpp" />
   </ItemGroup>
 </Project>

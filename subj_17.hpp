@@ -99,6 +99,10 @@ namespace tpr {
 			static constexpr int Resource22 = 200;
 			static constexpr int Resource31 = 240;
 			static constexpr int Resource32 = 300;
+
+			static constexpr int ASum		= 300;
+			static constexpr int BSum		= 170;
+			static constexpr int CSum		= 250;
 		};
 
 		template<typename T>
@@ -126,28 +130,28 @@ namespace tpr {
 			static VectorT gradient(const VectorT&) {
 				VectorT tmp;
 				// first row
-				tmp[0] = 3.0f;
-				tmp[1] = 3.0f;
-				tmp[2] = 9.0f;
-				tmp[3] = 9.0f;
-				tmp[4] = 5.0f;
-				tmp[5] = 5.0f;
+				tmp[model_index_to_index[111]] = 3.0f;
+				tmp[model_index_to_index[112]] = 3.0f;
+				tmp[model_index_to_index[121]] = 9.0f;
+				tmp[model_index_to_index[122]] = 9.0f;
+				tmp[model_index_to_index[131]] = 5.0f;
+				tmp[model_index_to_index[132]] = 5.0f;
 
 				//2-nd row
-				tmp[6] = 3.0f;
-				tmp[7] = 3.0f;
-				tmp[8] = 6.0f;
-				tmp[9] = 6.0f;
-				tmp[10] = 8.0f;
-				tmp[11] = 8.0f;
+				tmp[model_index_to_index[211]] = 3.0f;
+				tmp[model_index_to_index[212]] = 3.0f;
+				tmp[model_index_to_index[221]] = 6.0f;
+				tmp[model_index_to_index[222]] = 6.0f;
+				tmp[model_index_to_index[231]] = 8.0f;
+				tmp[model_index_to_index[232]] = 8.0f;
 
 				//3-rd row
-				tmp[12] = 8.0f;
-				tmp[13] = 8.0f;
-				tmp[14] = 2.0f;
-				tmp[15] = 2.0f;
-				tmp[16] = 5.0f;
-				tmp[17] = 5.0f;
+				tmp[model_index_to_index[311]] = 8.0f;
+				tmp[model_index_to_index[312]] = 8.0f;
+				tmp[model_index_to_index[321]] = 2.0f;
+				tmp[model_index_to_index[322]] = 2.0f;
+				tmp[model_index_to_index[331]] = 5.0f;
+				tmp[model_index_to_index[332]] = 5.0f;
 				return tmp;
 			}
 		};
@@ -162,10 +166,16 @@ namespace tpr {
 
 			// g1(x) = 1.5x111 + 0.75x121 + 2.5*x131 + 1.282* sqrt( 0.083 * x111^2 + 0.0208*x121^2 + 0.083*x131^2 ) - 250 <= 0
 			static ValueType apply(const VectorT& args) {
+				auto fff = 1.5 * args[model_index_to_index[111]] + 0.75 * args[model_index_to_index[121]] + 2.5 * args[model_index_to_index[131]]
+					+ Config::FLaplassInverse * std::sqrt(0.083 * sqr(args[model_index_to_index[111]])
+						+ 0.0208 * sqr(args[model_index_to_index[121]])
+						+ 0.083 * sqr(args[model_index_to_index[131]])
+					) - Config::Resource11;
+
 				return 1.5 * args[model_index_to_index[111]] + 0.75 * args[model_index_to_index[121]] + 2.5 * args[model_index_to_index[131]]
-					+ 1.282* std::sqrt(0.083 * args[model_index_to_index[111]] * args[model_index_to_index[111]]
-						+ 0.0208 * args[model_index_to_index[121]] * args[model_index_to_index[121]]
-						+ 0.083 * args[model_index_to_index[131]] * args[model_index_to_index[131]]
+					+ Config::FLaplassInverse * std::sqrt(0.083 * sqr(args[model_index_to_index[111]])
+						+ 0.0208 * sqr(args[model_index_to_index[121]])
+						+ 0.083 * sqr(args[model_index_to_index[131]])
 					) - Config::Resource11
 					;
 			}
@@ -183,7 +193,7 @@ namespace tpr {
 				// v[0]: dg1/dx111 = (1.5 + 1.282 * 0.5 * ( 0.083x111^2 + 0.0208x121^2 + 0.083x131^2 )^(-0.5)) * 2 * 0.083x111
 				tmp[ model_index_to_index[ 111 ] ] = (1.5 + Config::FLaplassInverse * 0.5
 					* std::pow(
-					(0.083 * sqr(xargs[model_index_to_index[111]]) + 0.0208 * sqr(xargs[model_index_to_index[121]]) + 0.083 * sqr(xargs[model_index_to_index[131]])),
+						(0.083 * sqr(xargs[model_index_to_index[111]]) + 0.0208 * sqr(xargs[model_index_to_index[121]]) + 0.083 * sqr(xargs[model_index_to_index[131]])),
 						-0.5)
 					)
 					* 2 * 0.083 * xargs[model_index_to_index[111]];
@@ -191,7 +201,7 @@ namespace tpr {
 				// v[2]: dg1/dx121 = (0.75 + 1.282 * 0.5 * ( 0.083x111^2 + 0.0208x121^2 + 0.083x131^2 )^(-0.5)) * 2 * 0.0208x121
 				tmp[ model_index_to_index[ 121 ] ] = (0.75 + Config::FLaplassInverse * 0.5
 					* std::pow(
-					(0.083 * sqr(xargs[model_index_to_index[111]]) + 0.0208 * sqr(xargs[model_index_to_index[121]]) + 0.083 * sqr(xargs[model_index_to_index[131]])),
+						(0.083 * sqr(xargs[model_index_to_index[111]]) + 0.0208 * sqr(xargs[model_index_to_index[121]]) + 0.083 * sqr(xargs[model_index_to_index[131]])),
 						-0.5)
 					)
 					* 2 * 0.0208 * xargs[model_index_to_index[121]];
@@ -200,7 +210,7 @@ namespace tpr {
 				// v[4]: dg1 / dx131 = (2.5 + 1.282 * 0.5 * (0.083x111 ^ 2 + 0.0208x121 ^ 2 + 0.083x131 ^ 2) ^ (-0.5)) * 2 * 0.083x131
 				tmp[ model_index_to_index[ 131 ] ] = (2.5 + Config::FLaplassInverse * 0.5
 					* std::pow(
-					(0.083 * sqr(xargs[model_index_to_index[111]]) + 0.0208 * sqr(xargs[model_index_to_index[121]]) + 0.083 * sqr(xargs[model_index_to_index[131]])),
+						(0.083 * sqr(xargs[model_index_to_index[111]]) + 0.0208 * sqr(xargs[model_index_to_index[121]]) + 0.083 * sqr(xargs[model_index_to_index[131]])),
 						-0.5)
 					)
 					* 2 * 0.083 * xargs[model_index_to_index[131]];
@@ -218,6 +228,11 @@ namespace tpr {
 
 			// g2(x) = 3x112 + 3x122 + 3.0*x132 + 1.282* sqrt( 0.33 * x112^2 + 0.033*x122^2 + 0.33*x132^2 ) - 150 <= 0
 			static ValueType apply(const VectorT& xargs) {
+				auto fff = 3.0 * xargs[model_index_to_index[112]] + 3.0 * xargs[model_index_to_index[122]] + 3.0 * xargs[model_index_to_index[132]]
+					+ Config::FLaplassInverse * std::sqrt(
+						0.33 * sqr(xargs[model_index_to_index[112]]) + 0.33 * sqr(xargs[model_index_to_index[122]]) + 0.33 * sqr(xargs[model_index_to_index[132]])
+					) - Config::Resource12
+					;
 				return 3.0 * xargs[model_index_to_index[112]] + 3.0 * xargs[model_index_to_index[122]] + 3.0 * xargs[model_index_to_index[132]]
 					+ Config::FLaplassInverse * std::sqrt(
 						0.33 * sqr(xargs[model_index_to_index[112]]) + 0.33 * sqr(xargs[model_index_to_index[122]]) + 0.33 * sqr(xargs[model_index_to_index[132]])
@@ -255,7 +270,7 @@ namespace tpr {
 
 				// 132
 				// v[5]: dg1/dx132 = (3.0 + 1.282 * 0.5 * ( 0.33 * x112^2 + 0.33*x122^2 + 0.33*x132^2 )^(-0.5)) * 2 * 0.33x132
-				tmp[ model_index_to_index[ 132 ] ] = (2.5 + Config::FLaplassInverse * 0.5
+				tmp[ model_index_to_index[ 132 ] ] = (3.0 + Config::FLaplassInverse * 0.5
 					* std::pow(
 					(0.33 * sqr(xargs[model_index_to_index[112]]) + 0.33 * sqr(xargs[model_index_to_index[122]]) + 0.33 * sqr(xargs[model_index_to_index[132]])),
 						-0.5
@@ -276,6 +291,12 @@ namespace tpr {
 
 			// g3(x) = 2.0x211 + 1.25x221 + 4.0*x231 + 1.282* sqrt( 0.33 * x211^2 + 0.0208*x221^2 + 0.33*x231^2 ) - 100 <= 0
 			static ValueType apply(const VectorT& args) {
+				auto fff = 2.0 * args[model_index_to_index[211]] + 1.25 * args[model_index_to_index[221]] + 4.0 * args[model_index_to_index[231]]
+					+ Config::FLaplassInverse * std::sqrt(
+						0.33 * sqr(args[model_index_to_index[211]])
+						+ 0.0208 * sqr(args[model_index_to_index[221]])
+						+ 0.33 * sqr(args[model_index_to_index[231]])
+					) - Config::Resource21;
 				return 2.0 * args[model_index_to_index[211]] + 1.25 * args[model_index_to_index[221]] + 4.0 * args[model_index_to_index[231]]
 					+ Config::FLaplassInverse * std::sqrt(
 						0.33 * sqr(args[model_index_to_index[211]])
@@ -298,7 +319,9 @@ namespace tpr {
 				// v[6]:  dg3/dx211 = 2 + 1.282*0.5*( 0.33x211^2 + 0.0208x221^2 + 0.33x231^2 )^ (-0.5) * 2 * 0.33x211
 				tmp[ model_index_to_index[ 211 ] ] = (2.0 + Config::FLaplassInverse * 0.5
 					* std::pow(
-					(0.33 * sqr(xargs[model_index_to_index[211]]) + 0.0208 * sqr(xargs[model_index_to_index[221]]) + 0.33 * sqr(xargs[model_index_to_index[231]])),
+					(0.33 * sqr(xargs[model_index_to_index[211]]) 
+						+ 0.0208 * sqr(xargs[model_index_to_index[221]]) 
+						+ 0.33 * sqr(xargs[model_index_to_index[231]])),
 						-0.5
 					)
 					)
@@ -307,7 +330,9 @@ namespace tpr {
 				// v[8]:  dg3/dx221 = 1.25 + 1.282*0.5*( 0.33x211^2 + 0.0208x221^2 + 0.33x231^2 )^ (-0.5) * 2 * 0.0208x221
 				tmp[ model_index_to_index[ 221 ] ] = (1.25 + Config::FLaplassInverse * 0.5
 					* std::pow(
-					(0.33 * sqr(xargs[model_index_to_index[211]]) + 0.0208 * sqr(xargs[model_index_to_index[221]]) + 0.33 * sqr(xargs[model_index_to_index[231]])),
+					(0.33 * sqr(xargs[model_index_to_index[211]]) 
+						+ 0.0208 * sqr(xargs[model_index_to_index[221]]) 
+						+ 0.33 * sqr(xargs[model_index_to_index[231]])),
 						-0.5
 					)
 					)
@@ -317,7 +342,9 @@ namespace tpr {
 				// v[10]: dg3/dx231 = 4 + 1.282*0.5*( 0.33x211^2 + 0.0208x221^2 + 0.33x231^2 )^ (-0.5) * 2 * 0.33x231
 				tmp[ model_index_to_index[ 231 ] ] = (4.0 + Config::FLaplassInverse * 0.5
 					* std::pow(
-					(0.33 * sqr(xargs[model_index_to_index[211]]) + 0.0208 * sqr(xargs[model_index_to_index[221]]) + 0.33 * sqr(xargs[model_index_to_index[231]])),
+					(0.33 * sqr(xargs[model_index_to_index[211]]) 
+						+ 0.0208 * sqr(xargs[model_index_to_index[221]]) 
+						+ 0.33 * sqr(xargs[model_index_to_index[231]])),
 						-0.5
 					)
 					)
@@ -337,6 +364,12 @@ namespace tpr {
 
 			// g4(x) = 5.0x212 + 1.5x222 + 5.0*x232 + 1.282* sqrt( 1.33 * x212^2 + 0.083*x222^2 + 0.33*x232^2 ) - 200 <= 0
 			static ValueType apply(const VectorT& args) {
+				auto fff = 5.0 * args[model_index_to_index[212]] + 1.5 * args[model_index_to_index[222]] + 5.0 * args[model_index_to_index[232]]
+					+ Config::FLaplassInverse * std::sqrt(
+						1.33 * sqr(args[model_index_to_index[212]])
+						+ 0.083 * sqr(args[model_index_to_index[222]])
+						+ 0.33 * sqr(args[model_index_to_index[232]])
+					) - Config::Resource22;
 				return 5.0 * args[model_index_to_index[212]] + 1.5 * args[model_index_to_index[222]] + 5.0 * args[model_index_to_index[232]]
 					+ Config::FLaplassInverse * std::sqrt(
 						1.33 * sqr(args[model_index_to_index[212]])
@@ -395,6 +428,13 @@ namespace tpr {
 
 			// g5(x) = 2.5 * x311 + 2.0 * x321 + 2.0 * x331 + 1.282 * sqrt( 0.75 * x311^2 + 0.33*x321^2 + 0.33*x331^2 ) - 240 <= 0
 			static ValueType apply(const VectorT& args) {
+				auto fff = 2.5 * args[model_index_to_index[311]] + 2.0 * args[model_index_to_index[321]] + 2.0 * args[model_index_to_index[331]]
+					+ Config::FLaplassInverse * std::sqrt(
+						0.75 * sqr(args[model_index_to_index[311]])
+						+ 0.33 * sqr(args[model_index_to_index[321]])
+						+ 0.33 * sqr(args[model_index_to_index[331]])
+					) - Config::Resource31;
+
 				return 2.5 * args[model_index_to_index[311]] + 2.0 * args[model_index_to_index[321]] + 2.0 * args[model_index_to_index[331]]
 					+ Config::FLaplassInverse * std::sqrt(
 						0.75 * sqr(args[model_index_to_index[311]])
@@ -432,9 +472,9 @@ namespace tpr {
 				// 331
 				grad[model_index_to_index[331]] = (2.0 + Config::FLaplassInverse * 0.5
 					* std::pow(
-					(0.75 * sqr(xargs[model_index_to_index[311]]) + 0.33 * sqr(xargs[model_index_to_index[321]]) + 0.33 * sqr(xargs[model_index_to_index[331]])),
+						(0.75 * sqr(xargs[model_index_to_index[311]]) + 0.33 * sqr(xargs[model_index_to_index[321]]) + 0.33 * sqr(xargs[model_index_to_index[331]])),
 						-0.5
-					)
+						)
 					)
 					* 2 * 0.33 * xargs[model_index_to_index[331]];
 				return grad;
@@ -452,6 +492,13 @@ namespace tpr {
 
 			// g6(x) = 4.0 * x312 + 4.0 * x322 + 7.0 * x332 + 1.282 * sqrt( 1.33 * x312^2 + 0.33*x322^2 + 0.33*x332^2 ) - 300 <= 0
 			static ValueType apply(const VectorT& args) {
+				auto fff = 4.0 * args[model_index_to_index[312]] + 4.0 * args[model_index_to_index[322]] + 7.0 * args[model_index_to_index[332]]
+					+ Config::FLaplassInverse * std::sqrt(
+						1.33 * sqr(args[model_index_to_index[312]])
+						+ 0.33 * sqr(args[model_index_to_index[322]])
+						+ 0.33 * sqr(args[model_index_to_index[332]])
+					) - Config::Resource32;
+
 				return 4.0 * args[model_index_to_index[312]] + 4.0 * args[model_index_to_index[322]] + 7.0 * args[model_index_to_index[332]]
 					+ Config::FLaplassInverse * std::sqrt(
 						1.33 * sqr(args[model_index_to_index[312]])
@@ -476,7 +523,7 @@ namespace tpr {
 						-0.5
 						)
 					)
-					* 2 * 0.75 * xargs[model_index_to_index[312]];
+					* 2 * 1.33 * xargs[model_index_to_index[312]];
 				// 322
 				grad[model_index_to_index[322]] = (4.0 + Config::FLaplassInverse * 0.5
 					* std::pow(
@@ -509,7 +556,7 @@ namespace tpr {
 
 			// g7(x) = 300 - x111 - x112 - x211 - x212 - x311 - x312 <= 0
 			static ValueType apply(const VectorT& args) {
-				return 300.0 - args[model_index_to_index[111]] - args[model_index_to_index[112]] 
+				return Config::ASum - args[model_index_to_index[111]] - args[model_index_to_index[112]] 
 					- args[model_index_to_index[211]] - args[model_index_to_index[212]]
 					- args[model_index_to_index[311]] - args[model_index_to_index[312]];
 			}
@@ -546,7 +593,7 @@ namespace tpr {
 
 			// g8(x) = 170 - x121 - x122 - x221 - x222 - x321 - x322 <= 0
 			static ValueType apply(const VectorT& args) {
-				return 170.0 - args[model_index_to_index[121]] - args[model_index_to_index[122]]
+				return Config::BSum - args[model_index_to_index[121]] - args[model_index_to_index[122]]
 					- args[model_index_to_index[221]] - args[model_index_to_index[222]]
 					- args[model_index_to_index[321]] - args[model_index_to_index[322]];
 			}
@@ -583,7 +630,7 @@ namespace tpr {
 
 			// g9(x) = 250 - x131 - x132 - x231 - x232 - x331 - x332 <= 0
 			static ValueType apply(const VectorT& args) {
-				return 250.0 - args[model_index_to_index[131]] - args[model_index_to_index[132]]
+				return Config::CSum - args[model_index_to_index[131]] - args[model_index_to_index[132]]
 					- args[model_index_to_index[231]] - args[model_index_to_index[232]]
 					- args[model_index_to_index[331]] - args[model_index_to_index[332]];
 			}

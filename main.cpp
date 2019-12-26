@@ -50,7 +50,7 @@ int main() {
 	PF::VectorT x0;
 
 	for (size_t idx = 0; idx < x0.size(); idx++)
-		x0[idx] = 4;
+		x0[idx] = 50;
 
 	PF::VectorT xOpt = PF::evaluate(x0);
 	std::ofstream out("x_opt.txt");
@@ -60,6 +60,31 @@ int main() {
 		out << "x[ " << modelIndex << " ]opt = " << std::round(xOpt[idx]) << " --> " << tpr::subj_17::model_index_to_description_conv[modelIndex] << '\n';
 	}
 
+	PF::ValueType sumProdA = xOpt[tpr::subj_17::model_index_to_index[111]] 
+		+ xOpt[tpr::subj_17::model_index_to_index[112]]
+		+ xOpt[tpr::subj_17::model_index_to_index[211]]
+		+ xOpt[tpr::subj_17::model_index_to_index[212]]
+		+ xOpt[tpr::subj_17::model_index_to_index[311]]
+		+ xOpt[tpr::subj_17::model_index_to_index[312]]
+		;
+	PF::ValueType sumProdB = xOpt[tpr::subj_17::model_index_to_index[121]]
+		+ xOpt[tpr::subj_17::model_index_to_index[122]]
+		+ xOpt[tpr::subj_17::model_index_to_index[221]]
+		+ xOpt[tpr::subj_17::model_index_to_index[222]]
+		+ xOpt[tpr::subj_17::model_index_to_index[321]]
+		+ xOpt[tpr::subj_17::model_index_to_index[322]]
+		;
+	PF::ValueType sumProdC = xOpt[tpr::subj_17::model_index_to_index[131]]
+		+ xOpt[tpr::subj_17::model_index_to_index[132]]
+		+ xOpt[tpr::subj_17::model_index_to_index[231]]
+		+ xOpt[tpr::subj_17::model_index_to_index[232]]
+		+ xOpt[tpr::subj_17::model_index_to_index[331]]
+		+ xOpt[tpr::subj_17::model_index_to_index[332]]
+		;
+
+	out << "sum(A) = " << sumProdA << std::endl;
+	out << "sum(B) = " << sumProdB << std::endl;
+	out << "sum(C) = " << sumProdC << std::endl;
 	out.flush();
 #else
 	using TrainPF = tpr::PenaltyFunction<tpr::TrainingModel::Fx, size_t, tpr::TrainingModel::G1, tpr::TrainingModel::G2, tpr::TrainingModel::G3, tpr::TrainingModel::G4>;

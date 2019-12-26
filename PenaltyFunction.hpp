@@ -163,7 +163,7 @@ namespace tpr {
 
 	public: // == CONSTANTS ==
 		static constexpr ValueType	Beta			= 2.0f;			//!< growth factor.
-		static constexpr ValueType	Epsilon			= 1e-4f;		//!< accuracy
+		static constexpr ValueType	Epsilon			= 1e-5f;		//!< accuracy
 		static constexpr ValueType	DefaultC		= 0.5f;			//!< positive constant
 		static constexpr IndexType	N				= TargetF::N;	//!< sizeof Xopt vector
 		static constexpr IndexType	MaxPIterations	= 100'000;

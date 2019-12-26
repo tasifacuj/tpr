@@ -7,12 +7,22 @@
 namespace tpr {
 	/**
 	 * @brief penalty function algorithm
-	 * while true
+	 * min(f(x))
+	 * with contraints
+	 * gi(x) <= 0
+	 * alpha(x) = sum( R1( gi(x) ) ) + sum( R2( hj(x) ) )
+	 * R1(gi(x)) = max( 0, gi(x) )^P
+	 * R2(gj(x)) = hj(x)^ 2 * P
+	 * penalty function itself: F(x,rk) = f(x) + rk * alpha(x) --> min
+	 * min(F(x, rk)) may be found by gradient descent, for example.
+	 *
+ 	 * while true
 	 * do
 	 *     F(x, r[k]) = f(x_opt) + r[k] * alpha(x_opt)
 	 *	   x_opt = min( F(x, r[k]) )
 	 *	   
-	 *     if r[k] * alpha(x_opt) <= Epsilon
+	 *     eps = F( x[rk] ) - F(x[rk-1])
+	 *     if eps <= Epsilon
 	 *     then
 	 *        return x_opt
 	 *	   else
@@ -59,6 +69,9 @@ namespace tpr {
 			}
 		};
 
+		/**
+		 * R1
+		 */
 		template<typename ValueT, typename VecT, int PParam, typename G, typename... GiFuncTypes>
 		struct R1 : R1<ValueT, VecT, PParam, G>
 			, R1< ValueT, VecT, PParam, GiFuncTypes ... > {
@@ -127,12 +140,13 @@ namespace tpr {
 			}
 		};
 
-		static constexpr int		PCoef = 2;
+		static constexpr int		PCoef = 2;//!< Power of gi, R1(gi(x)) = max( 0, gi(x) )^P
 
 		using R1Sum = R1<ValueType, VectorT, ThisT::PCoef, GiFuncTypes ...>;
 
 		/**
 		 * alpha(x) = sum( R1( gi(x) ) ) + sum( R2( hi(x) ) )
+		 * @note sum( R2( hi(x) ) ) not implemented.
 		 */
 		template<typename ValueT, typename VecT, typename ROneSum, typename RTwo = void>
 		struct AlphaFunc {
@@ -148,13 +162,13 @@ namespace tpr {
 		using Alpha = AlphaFunc<ValueType, VectorT, R1Sum>;
 
 	public: // == CONSTANTS ==
-		static constexpr ValueType	Beta			= 2.0f;	//!< growth factor.
-		static constexpr ValueType	Epsilon			= 1e-4f;//!< accuracy
-		static constexpr ValueType	DefaultC		= 0.5f; //!< positive constant
-		static constexpr IndexType	N				= TargetF::N;
+		static constexpr ValueType	Beta			= 2.0f;			//!< growth factor.
+		static constexpr ValueType	Epsilon			= 1e-4f;		//!< accuracy
+		static constexpr ValueType	DefaultC		= 0.5f;			//!< positive constant
+		static constexpr IndexType	N				= TargetF::N;	//!< sizeof Xopt vector
 		static constexpr IndexType	MaxPIterations	= 100'000;
 
-		static ValueType	sC;
+		static ValueType	sC;										//!< rk
 
 	public: // == TYPES ==
 

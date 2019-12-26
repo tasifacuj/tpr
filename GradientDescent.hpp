@@ -3,7 +3,11 @@
 #include <cassert>
 
 namespace tpr {
-	// when implementing fast descent use CRTP for fast impl/split impl
+	/**
+	 * gradient descent implementation with step splitting
+	 * http://www.machinelearning.ru/wiki/index.php?title=%D0%9C%D0%B5%D1%82%D0%BE%D0%B4_%D0%B3%D1%80%D0%B0%D0%B4%D0%B8%D0%B5%D0%BD%D1%82%D0%BD%D0%BE%D0%B3%D0%BE_%D1%81%D0%BF%D1%83%D1%81%D0%BA%D0%B0
+	 * TODO: when implementing fast descent use CRTP for fast impl/split impl
+	 */
 	template< typename F,
 		typename IndexType = size_t
 	>
@@ -55,17 +59,9 @@ namespace tpr {
 				}
 
 				ValueType diff = std::fabs(F::apply(currentXVec) - F::apply(oldXVec));
+				
 				if(diff < Epsilon)
 					return currentXVec;
-				//squaredNorm = 0;
-				
-				/*for (size_t j = 0; j < oldXVec.size(); j++)
-					squaredNorm += (oldXVec[j] - currentXVec[j])*(oldXVec[j] - currentXVec[j]);
-				
-				squaredNorm = std::sqrt(squaredNorm);
-
-				if (squaredNorm < Epsilon)
-					return currentXVec;*/
 			}// for
 
 			assert(0 && "Failed");

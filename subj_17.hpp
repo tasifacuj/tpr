@@ -76,9 +76,9 @@ namespace tpr {
 		}
 
 		/**
-		 * f(x) = 3x0  + 3x1  + 9x2  + 9x3  + 5x4  + 5x5
-		 *      + 3x6  + 3x7  + 6x8  + 6x9 + 8x10 + 8x11
-		 *		+ 8x12 + 8x13 + 2x14 + 2x15 + 5x16 + 5x17
+		 * f(x) = 3x111  + 3x112  + 9x121  + 9x122  + 5x131  + 5x132
+		 *      + 3x211  + 3x212  + 6x221  + 6x222 + 8x231 + 8x232
+		 *		+ 8x311 + 8x312 + 2x321 + 2x322 + 5x331 + 5x332
 		 */
 		struct Fx {
 			static constexpr size_t N = 18;
@@ -86,9 +86,9 @@ namespace tpr {
 			using VectorT = std::array<ValueType, N>;
 
 			static ValueType apply(const VectorT& args) {
-				return 3.0 * args[0] + 3.0 * args[1] + 9.0 * args[2] + 9.0 * args[3] + 5.0 * args[4] + 5.0 * args[5]
-					+ 3.0 * args[6] + 3.0 * args[7] + 6.0 * args[8] + 6.0 * args[9] + 8.0 * args[10] + 8.0 * args[11]
-					+ 8.0 * args[12] + 8.0 * args[13] + 2.0 * args[14] + 2.0 * args[15] + 5.0 * args[16] + 5.0 * args[17]
+				return 3.0 * args[ model_index_to_index[111] ] + 3.0 * args[model_index_to_index[112]] + 9.0 * args[model_index_to_index[121]] + 9.0 * args[model_index_to_index[122]] + 5.0 * args[model_index_to_index[131]] + 5.0 * args[model_index_to_index[132]]
+					+ 3.0 * args[model_index_to_index[211]] + 3.0 * args[model_index_to_index[212]] + 6.0 * args[model_index_to_index[221]] + 6.0 * args[model_index_to_index[222]] + 8.0 * args[model_index_to_index[231]] + 8.0 * args[model_index_to_index[232]]
+					+ 8.0 * args[model_index_to_index[311]] + 8.0 * args[model_index_to_index[312]] + 2.0 * args[model_index_to_index[321]] + 2.0 * args[model_index_to_index[322]] + 5.0 * args[model_index_to_index[331]] + 5.0 * args[model_index_to_index[332]]
 					;
 			}
 

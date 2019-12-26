@@ -175,11 +175,11 @@ int main() {
 */
 	assert(tpr::subj_17::model_index_to_index.size() == 18);
 	using PF = tpr::PenaltyFunction<tpr::subj_17::Fx, size_t, tpr::subj_17::G1, tpr::subj_17::G2, tpr::subj_17::G3, tpr::subj_17::G4, tpr::subj_17::G5, tpr::subj_17::G6, tpr::subj_17::G7, tpr::subj_17::G8, tpr::subj_17::G9>;
-	PF::VectorT x0{ 
-		80.0, 55.0, 35.0, 55.0, 100.0, 100.0, // first row
-		100.0, 50.0, 25.0, 25.0, 40.0, 40.0, // second row
-		50.0, 50.0, 35.0, 35.0, 45.0, 45.0  // thrd row
-	};
+	PF::VectorT x0;
+
+	for (size_t idx = 0; idx < x0.size(); idx++)
+		x0[idx] = 2;
+
 	PF::VectorT xOpt = PF::evaluate(x0);
 	return 0;
 }

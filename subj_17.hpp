@@ -92,17 +92,18 @@ namespace tpr {
 
 		class Config {
 		public:
+			static constexpr float Multiplier = 1.0f;
 			static constexpr double FLaplassInverse = 1.282;
-			static constexpr int Resource11 = 250 ;
-			static constexpr int Resource12 = 150 ;
-			static constexpr int Resource21 = 100 ;
-			static constexpr int Resource22 = 200 ;
+			static constexpr int Resource11 = 250 * 2;
+			static constexpr int Resource12 = 150 * 2;
+			static constexpr int Resource21 = 100 * 2;
+			static constexpr int Resource22 = 200 * 2;
 			static constexpr int Resource31 = 240 ;
-			static constexpr int Resource32 = 300 ;
+			static constexpr int Resource32 = 315;
 
 			static constexpr int ASum		= 100;
 			static constexpr int BSum		= 70;
-			static constexpr int CSum		= 300;
+			static constexpr int CSum		= 10;
 		};
 
 		template<typename T>

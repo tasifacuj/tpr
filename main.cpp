@@ -90,7 +90,16 @@ static void test_subj_17(){
 static void test_doc_example() {
 	using TrainPF = tpr::PenaltyFunction<tpr::TrainingModel::Fx, size_t, tpr::TrainingModel::G1, tpr::TrainingModel::G2, tpr::TrainingModel::G3, tpr::TrainingModel::G4>;
 	TrainPF::VectorT x0T{ 6.0f, 7.0f };
-	TrainPF::VectorT xOptT = TrainPF::evaluate(x0T);
+	TrainPF::VectorT xOpt = TrainPF::evaluate(x0T);
+
+	for (size_t idx = 0; idx < TrainPF::N; idx++) {
+		std::cerr << "x[ " << idx << " ]opt = " << xOpt[idx] << '\n';
+	}
+
+	std::cerr << "g1 = " << (-3.0 * xOpt[0] - 2.0 * xOpt[1] + 6.0) << std::endl;
+	std::cerr << "g2 = " << (-1.0 * xOpt[0] + xOpt[1] - 3.0) << std::endl;
+	std::cerr << "g3 = " << (xOpt[0] + xOpt[1] - 7.0) << std::endl;
+	std::cerr << "g4 = " << ( (2.0 / 3.0 ) * xOpt[0] - xOpt[1] - ( 4.0 / 3.0 )) << std::endl;
 }
 
 static void test_subj_17_simplified() {
@@ -98,14 +107,18 @@ static void test_subj_17_simplified() {
 	PF::VectorT x0;
 
 	for (size_t idx = 0; idx < x0.size(); idx++)
-		x0[idx] = 50;
+		x0[idx] = 100;
 
 	PF::VectorT xOpt = PF::evaluate(x0);
-	
 
 	for (size_t idx = 0; idx < PF::N; idx++) {
-		std::cerr << "x[ " << idx << " ]opt = " << std::round(xOpt[idx]) << '\n';
-	}	
+		std::cerr << "x[ " << idx << " ]opt = " << xOpt[idx] << '\n';
+	}
+
+	std::cerr << "g1 = " << (1.5 * xOpt[0] + 0.75 * xOpt[1] + 2.5 * xOpt[2] - 250) << std::endl;
+	std::cerr << "g2 = " << (30.0 - xOpt[0] ) << std::endl;
+	std::cerr << "g3 = " << (70.0 - xOpt[1] ) << std::endl;
+	std::cerr << "g4 = " << (50.0 - xOpt[2] ) << std::endl;
 }
 
 int main() {

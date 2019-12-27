@@ -121,6 +121,7 @@
     <ClInclude Include="GradientDescent.hpp" />
     <ClInclude Include="PenaltyFunction.hpp" />
     <ClInclude Include="subj_17.hpp" />
+    <ClInclude Include="subj_17_simplified.hpp" />
     <ClInclude Include="TrainingModel.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

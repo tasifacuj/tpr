@@ -195,7 +195,7 @@ namespace tpr {
 			static VecT gradient(const VecT& xArgs) {
 				VecT fGrad = F::gradient(xArgs);
 				VecT alphaGrad = A::gradient(xArgs);
-
+				bool tmp = true;
 				for( IndexType idx = 0; idx < alphaGrad.size(); idx++)
 					alphaGrad[ idx ] *= ThisT::sC;
 				

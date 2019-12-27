@@ -34,7 +34,9 @@ namespace tpr {
 				oldXVec = currentXVec;
 				// evaluate gradient
 				VectorT gradientVec = F::gradient(currentXVec);
+				auto f1 = F::apply(currentXVec);
 
+				bool tmp = false;
 				// evaluate new value
 				for (IndexType j = 0; j < N; j++)
 					currentXVec[j] = currentXVec[j] - lambda * gradientVec[j];
@@ -49,8 +51,6 @@ namespace tpr {
 				
 
 				while (F::apply(currentXVec) > (F::apply(oldXVec) - SplitEps * lambda * squaredNorm) ) {
-					auto f1 = F::apply(currentXVec);
-					auto f2 = F::apply(oldXVec) - SplitEps * lambda * squaredNorm;
 					lambda = SplitDelta * lambda;
 					currentXVec = oldXVec;
 
@@ -62,6 +62,17 @@ namespace tpr {
 				
 				if(diff < Epsilon)
 					return currentXVec;
+
+#if 0
+				squaredNorm = 0;
+				for (IndexType j = 0; j < oldXVec.size(); j++)
+					squaredNorm += (oldXVec[j] - currentXVec[j])*(oldXVec[j] - currentXVec[j]);
+				
+				squaredNorm = sqrt(squaredNorm);
+				
+				if (squaredNorm < Epsilon)
+					return currentXVec;
+#endif
 			}// for
 
 			assert(0 && "Failed");

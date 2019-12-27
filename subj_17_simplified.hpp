@@ -28,7 +28,7 @@ namespace tpr {
 
 			// g1(x) = 1.5x111 + 0.75x121 + 2.5*x131 + 1.282* sqrt( 0.083 * x111^2 + 0.0208*x121^2 + 0.083*x131^2 ) - 250 <= 0
 			static ValueType apply(const VectorT& args) {
-				auto fff = 1.5 * args[0] + 0.75 * args[1] + 2.5 * args[2]
+				/*auto fff = 1.5 * args[0] + 0.75 * args[1] + 2.5 * args[2]
 					+ 1.282 * std::sqrt(0.083 * sqr(args[0])
 						+ 0.0208 * sqr(args[1])
 						+ 0.083 * sqr(args[2])
@@ -39,7 +39,10 @@ namespace tpr {
 						+ 0.0208 * sqr(args[ 1 ])
 						+ 0.083 * sqr(args[ 2 ])
 					) - 250
-					;
+					;*/
+
+				auto fff = 1.5 * args[0] + 0.75 * args[1] + 2.5 * args[2] - 250;
+				return 1.5 * args[0] + 0.75 * args[1] + 2.5 * args[2] - 250;
 			}
 
 			/**
@@ -53,29 +56,39 @@ namespace tpr {
 				memset(&tmp[0], 0, sizeof(ValueType) * N);
 				//x111
 				// v[0]: dg1/dx111 = (1.5 + 1.282 * 0.5 * ( 0.083x111^2 + 0.0208x121^2 + 0.083x131^2 )^(-0.5)) * 2 * 0.083x111
-				tmp[0] = (1.5 + 1.282 * 0.5
-					* std::pow(
-						(0.083 * sqr(xargs[0]) + 0.0208 * sqr(xargs[1]) + 0.083 * sqr(xargs[2])),
-						-0.5)
-					)
-					* 2 * 0.083 * xargs[0];
+				//tmp[0] = (1.5 + 1.282 * 0.5
+				//	* std::pow(
+				//		(0.083 * sqr(xargs[0]) + 0.0208 * sqr(xargs[1]) + 0.083 * sqr(xargs[2])),
+				//		-0.5)
+				//	)
+				//	* 2 * 0.083 * xargs[0];
+				//// 121
+				//// v[2]: dg1/dx121 = (0.75 + 1.282 * 0.5 * ( 0.083x111^2 + 0.0208x121^2 + 0.083x131^2 )^(-0.5)) * 2 * 0.0208x121
+				//tmp[1] = (0.75 + 1.282 * 0.5
+				//	* std::pow(
+				//		(0.083 * sqr(xargs[0]) + 0.0208 * sqr(xargs[1]) + 0.083 * sqr(xargs[2])),
+				//		-0.5)
+				//	)
+				//	* 2 * 0.0208 * xargs[1];
+
+				//// 131
+				//// v[4]: dg1 / dx131 = (2.5 + 1.282 * 0.5 * (0.083x111 ^ 2 + 0.0208x121 ^ 2 + 0.083x131 ^ 2) ^ (-0.5)) * 2 * 0.083x131
+				//tmp[2] = (2.5 + 1.282 * 0.5
+				//	* std::pow(
+				//	(0.083 * sqr(xargs[0]) + 0.0208 * sqr(xargs[1]) + 0.083 * sqr(xargs[2])),
+				//		-0.5)
+				//	)
+				//	* 2 * 0.083 * xargs[2];
+
+
+				tmp[0] = 1.5;
 				// 121
 				// v[2]: dg1/dx121 = (0.75 + 1.282 * 0.5 * ( 0.083x111^2 + 0.0208x121^2 + 0.083x131^2 )^(-0.5)) * 2 * 0.0208x121
-				tmp[1] = (0.75 + 1.282 * 0.5
-					* std::pow(
-						(0.083 * sqr(xargs[0]) + 0.0208 * sqr(xargs[1]) + 0.083 * sqr(xargs[2])),
-						-0.5)
-					)
-					* 2 * 0.0208 * xargs[1];
+				tmp[1] = 0.75;
 
 				// 131
 				// v[4]: dg1 / dx131 = (2.5 + 1.282 * 0.5 * (0.083x111 ^ 2 + 0.0208x121 ^ 2 + 0.083x131 ^ 2) ^ (-0.5)) * 2 * 0.083x131
-				tmp[2] = (2.5 + 1.282 * 0.5
-					* std::pow(
-					(0.083 * sqr(xargs[0]) + 0.0208 * sqr(xargs[1]) + 0.083 * sqr(xargs[2])),
-						-0.5)
-					)
-					* 2 * 0.083 * xargs[2];
+				tmp[2] = 2.5;
 				return tmp;
 			}
 		};
@@ -87,8 +100,8 @@ namespace tpr {
 
 			// g1(x) = 1.5x111 + 0.75x121 + 2.5*x131 + 1.282* sqrt( 0.083 * x111^2 + 0.0208*x121^2 + 0.083*x131^2 ) - 250 <= 0
 			static ValueType apply(const VectorT& args) {
-				auto fff = 300 - args[0];
-				return 300 - args[0];
+				auto fff = 30 - args[0];
+				return 30 - args[0];
 			}
 
 			static VectorT gradient(const VectorT& ) {
@@ -103,8 +116,8 @@ namespace tpr {
 
 			// g1(x) = 1.5x111 + 0.75x121 + 2.5*x131 + 1.282* sqrt( 0.083 * x111^2 + 0.0208*x121^2 + 0.083*x131^2 ) - 250 <= 0
 			static ValueType apply(const VectorT& args) {
-				auto fff = 170 - args[1];
-				return 170 - args[1];
+				auto fff = 70 - args[1];
+				return 70 - args[1];
 			}
 
 			static VectorT gradient(const VectorT& ) {
@@ -119,8 +132,8 @@ namespace tpr {
 
 			// g1(x) = 1.5x111 + 0.75x121 + 2.5*x131 + 1.282* sqrt( 0.083 * x111^2 + 0.0208*x121^2 + 0.083*x131^2 ) - 250 <= 0
 			static ValueType apply(const VectorT& args) {
-				auto fff = 250 - args[2];
-				return 250 - args[2];
+				auto fff = 50 - args[2];
+				return 50 - args[2];
 			}
 
 			static VectorT gradient(const VectorT& ) {

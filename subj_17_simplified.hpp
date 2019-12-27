@@ -7,6 +7,13 @@ namespace tpr {
 			return val * val;
 		}
 
+		struct  Cfg{
+			static constexpr double Resource = 350.0;
+			static constexpr int Q1 = 90;
+			static constexpr int Q2 = 70;
+			static constexpr int Q3 = 70;
+		};
+
 		struct Fx {
 			static constexpr size_t N = 3;
 			using ValueType = double;
@@ -41,8 +48,8 @@ namespace tpr {
 					) - 250
 					;*/
 
-				auto fff = 1.5 * args[0] + 0.75 * args[1] + 2.5 * args[2] - 250;
-				return 1.5 * args[0] + 0.75 * args[1] + 2.5 * args[2] - 250;
+				auto fff = 1.5 * args[0] + 0.75 * args[1] + 2.5 * args[2] - Cfg::Resource;
+				return 1.5 * args[0] + 0.75 * args[1] + 2.5 * args[2] - Cfg::Resource;
 			}
 
 			/**
@@ -100,8 +107,8 @@ namespace tpr {
 
 			// g1(x) = 1.5x111 + 0.75x121 + 2.5*x131 + 1.282* sqrt( 0.083 * x111^2 + 0.0208*x121^2 + 0.083*x131^2 ) - 250 <= 0
 			static ValueType apply(const VectorT& args) {
-				auto fff = 30 - args[0];
-				return 30 - args[0];
+				auto fff = Cfg::Q1 - args[0];
+				return Cfg::Q1 - args[0];
 			}
 
 			static VectorT gradient(const VectorT& ) {
@@ -116,8 +123,8 @@ namespace tpr {
 
 			// g1(x) = 1.5x111 + 0.75x121 + 2.5*x131 + 1.282* sqrt( 0.083 * x111^2 + 0.0208*x121^2 + 0.083*x131^2 ) - 250 <= 0
 			static ValueType apply(const VectorT& args) {
-				auto fff = 70 - args[1];
-				return 70 - args[1];
+				auto fff = Cfg::Q2 - args[1];
+				return Cfg::Q2 - args[1];
 			}
 
 			static VectorT gradient(const VectorT& ) {
@@ -132,8 +139,8 @@ namespace tpr {
 
 			// g1(x) = 1.5x111 + 0.75x121 + 2.5*x131 + 1.282* sqrt( 0.083 * x111^2 + 0.0208*x121^2 + 0.083*x131^2 ) - 250 <= 0
 			static ValueType apply(const VectorT& args) {
-				auto fff = 50 - args[2];
-				return 50 - args[2];
+				auto fff = Cfg::Q3 - args[2];
+				return Cfg::Q3 - args[2];
 			}
 
 			static VectorT gradient(const VectorT& ) {

@@ -49,7 +49,7 @@ static void test_subj_17(){
 	PF::VectorT x0;
 
 	for (size_t idx = 0; idx < x0.size(); idx++)
-		x0[idx] = 50;
+		x0[idx] = 5;
 
 	PF::VectorT xOpt = PF::evaluate(x0);
 	std::ofstream out("x_opt.txt");
@@ -84,6 +84,13 @@ static void test_subj_17(){
 	out << "sum(A) = " << sumProdA << std::endl;
 	out << "sum(B) = " << sumProdB << std::endl;
 	out << "sum(C) = " << sumProdC << std::endl;
+
+	out << "g1 = " << tpr::subj_17::G1::apply(xOpt) << std::endl;
+	out << "g2 = " << tpr::subj_17::G2::apply(xOpt) << std::endl;
+	out << "g3 = " << tpr::subj_17::G3::apply(xOpt) << std::endl;
+	out << "g4 = " << tpr::subj_17::G4::apply(xOpt) << std::endl;
+	out << "g5 = " << tpr::subj_17::G5::apply(xOpt) << std::endl;
+	out << "g6 = " << tpr::subj_17::G6::apply( xOpt ) << std::endl;
 	out.flush();
 }
 
@@ -107,21 +114,21 @@ static void test_subj_17_simplified() {
 	PF::VectorT x0;
 
 	for (size_t idx = 0; idx < x0.size(); idx++)
-		x0[idx] = 100;
+		x0[idx] = 10;
 
 	PF::VectorT xOpt = PF::evaluate(x0);
 
 	for (size_t idx = 0; idx < PF::N; idx++) {
-		std::cerr << "x[ " << idx << " ]opt = " << xOpt[idx] << '\n';
+		std::cerr << "x[ " << idx << " ]opt = " << std::round(xOpt[idx]) << '\n';
 	}
 
-	std::cerr << "g1 = " << (1.5 * xOpt[0] + 0.75 * xOpt[1] + 2.5 * xOpt[2] - 250) << std::endl;
-	std::cerr << "g2 = " << (30.0 - xOpt[0] ) << std::endl;
-	std::cerr << "g3 = " << (70.0 - xOpt[1] ) << std::endl;
-	std::cerr << "g4 = " << (50.0 - xOpt[2] ) << std::endl;
+	std::cerr << "g1 = " << (1.5 * std::round(xOpt[0]) + 0.75 * std::round(xOpt[1]) + 2.5 * std::round(xOpt[2]) - tpr::simplified::Cfg::Resource) << std::endl;
+	std::cerr << "g2 = " << (tpr::simplified::Cfg::Q1 - std::round (xOpt[0] ) ) << std::endl;
+	std::cerr << "g3 = " << (tpr::simplified::Cfg::Q2 - std::round( xOpt[1] ) ) << std::endl;
+	std::cerr << "g4 = " << (tpr::simplified::Cfg::Q3 - std::round( xOpt[2] ) ) << std::endl;
 }
 
 int main() {
-	test_subj_17_simplified();
+	test_subj_17();
 	return 0;
 }

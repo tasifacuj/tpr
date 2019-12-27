@@ -93,16 +93,16 @@ namespace tpr {
 		class Config {
 		public:
 			static constexpr double FLaplassInverse = 1.282;
-			static constexpr int Resource11 = 250;
-			static constexpr int Resource12 = 150;
-			static constexpr int Resource21 = 100;
-			static constexpr int Resource22 = 200;
-			static constexpr int Resource31 = 240;
-			static constexpr int Resource32 = 300;
+			static constexpr int Resource11 = 250 ;
+			static constexpr int Resource12 = 150 ;
+			static constexpr int Resource21 = 100 ;
+			static constexpr int Resource22 = 200 ;
+			static constexpr int Resource31 = 240 ;
+			static constexpr int Resource32 = 300 ;
 
-			static constexpr int ASum		= 300;
-			static constexpr int BSum		= 170;
-			static constexpr int CSum		= 250;
+			static constexpr int ASum		= 100;
+			static constexpr int BSum		= 70;
+			static constexpr int CSum		= 150;
 		};
 
 		template<typename T>

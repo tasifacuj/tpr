@@ -16,8 +16,8 @@ namespace tpr {
 		using ValueType = typename F::ValueType;
 		using VectorT	= typename F::VectorT;
 	public: // == CONSTANTS == 
-		static constexpr ValueType	Epsilon			= 1e-5f;
-		static constexpr IndexType	MaxIterations	= 100'000;
+		static constexpr ValueType	Epsilon			= 0.001;
+		static constexpr IndexType	MaxIterations	= 1'000'000;
 		static constexpr ValueType	SplitEps		= 0.1f;
 		static constexpr ValueType  SplitDelta		= 0.95f;
 		static constexpr ValueType  Lambda			= 1.0f;
@@ -63,20 +63,102 @@ namespace tpr {
 				if(diff < Epsilon)
 					return currentXVec;
 
-#if 0
-				squaredNorm = 0;
-				for (IndexType j = 0; j < oldXVec.size(); j++)
-					squaredNorm += (oldXVec[j] - currentXVec[j])*(oldXVec[j] - currentXVec[j]);
-				
-				squaredNorm = sqrt(squaredNorm);
-				
-				if (squaredNorm < Epsilon)
-					return currentXVec;
-#endif
 			}// for
 
 			assert(0 && "Failed");
 			return currentXVec;
 		}
+	};
+
+	template< typename F,
+		typename IndexType = size_t
+	>
+		class FastestGradientDescent {
+		public: // == TYPES ==
+			using ValueType = typename F::ValueType;
+			using VectorT = typename F::VectorT;
+		public: // == CONSTANTS == 
+			static constexpr ValueType	Epsilon = 0.1;
+			static constexpr IndexType	MaxIterations = 1'000'000;
+			static constexpr ValueType	SplitEps = 0.1f;
+			static constexpr ValueType  SplitDelta = 0.95f;
+			static constexpr ValueType  Lambda = 1.0f;
+		public:
+			static ValueType MakeSimplefx(ValueType x, const VectorT& grad, const VectorT& xj) {
+				VectorT buffer;
+
+				for (IndexType idx = 0; idx < grad.size(); idx++) {
+					buffer[ idx ] = xj[ idx ] - x * grad[ idx ];
+				}
+				
+
+				return F::apply(buffer);
+			}
+
+			static ValueType GoldenSelsction(ValueType a, ValueType b, ValueType eps, const VectorT& gradient, const VectorT& x) {
+				const ValueType fi = 1.6180339887;
+				ValueType x1, x2;
+				ValueType y1, y2;
+
+				x1 = b - ((b - a) / fi);
+				x2 = a + ((b - a) / fi);
+				y1 = MakeSimplefx(x1, gradient, x);
+				y2 = MakeSimplefx(x2, gradient, x);
+				
+				while (std::abs(b - a) > eps){
+					if (y1 <= y2)
+					{
+						b = x2;
+						x2 = x1;
+						x1 = b - ((b - a) / fi);
+						y2 = y1;
+						y1 = MakeSimplefx(x1, gradient, x);
+					}
+					else
+					{
+						a = x1;
+						x1 = x2;
+						x2 = a + ((b - a) / fi);
+						y1 = y2;
+						y2 = MakeSimplefx(x2, gradient, x);
+					}
+				}
+
+				return (a + b) / 2;
+			}
+
+			static VectorT CalculateXVec( const VectorT& x, const VectorT& gradient, ValueType lambda)
+			{
+				VectorT buffer;
+				assert(buffer.size() == gradient.size());
+				
+				for (IndexType idx = 0; idx < buffer.size(); idx++) {
+					buffer[idx] = x[idx] - lambda * gradient[idx];
+				}
+
+				return buffer;
+			}
+
+			static VectorT calculate(const VectorT& x0, ValueType, IndexType& it) {
+				IndexType N = F::N;// take num of vars from F
+				VectorT oldXVec;
+				VectorT currentXVec = x0;
+				it = 0;
+
+				do {
+					oldXVec = currentXVec;
+					VectorT grad = F::gradient(currentXVec);
+					ValueType lambda = GoldenSelsction(0, 0.05, Epsilon, grad, currentXVec);
+					currentXVec = CalculateXVec(currentXVec, grad, lambda);
+					it++;
+				} while (std::abs(F::apply(currentXVec) - F::apply(oldXVec)) > Epsilon && it < MaxIterations);
+				
+				auto f1 = std::abs(F::apply(currentXVec) );
+				auto f2 = std::abs( F::apply(oldXVec) );
+				auto d = std::abs(f1 - f2);
+				assert(it < MaxIterations);
+
+				return currentXVec;
+			}
 	};
 }// namespace tpr

@@ -102,7 +102,7 @@ namespace tpr {
 
 			static constexpr int ASum		= 100;
 			static constexpr int BSum		= 70;
-			static constexpr int CSum		= 150;
+			static constexpr int CSum		= 300;
 		};
 
 		template<typename T>

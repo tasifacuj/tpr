@@ -91,6 +91,10 @@ static void test_subj_17(){
 	out << "g4 = " << tpr::subj_17::G4::apply(xOpt) << std::endl;
 	out << "g5 = " << tpr::subj_17::G5::apply(xOpt) << std::endl;
 	out << "g6 = " << tpr::subj_17::G6::apply( xOpt ) << std::endl;
+
+	out << "g7 = " << tpr::subj_17::G7::apply(xOpt) << std::endl;
+	out << "g8 = " << tpr::subj_17::G8::apply(xOpt) << std::endl;
+	out << "g9 = " << tpr::subj_17::G9::apply(xOpt) << std::endl;
 	out.flush();
 }
 

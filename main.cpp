@@ -81,9 +81,9 @@ static void test_subj_17(){
 		+ xOpt[tpr::subj_17::model_index_to_index[332]]
 		;
 
-	out << "sum(A) = " << sumProdA << std::endl;
-	out << "sum(B) = " << sumProdB << std::endl;
-	out << "sum(C) = " << sumProdC << std::endl;
+	out << "sum(A) = " << sumProdA << ", threshold: " << tpr::subj_17::Config::ASum << std::endl;
+	out << "sum(B) = " << sumProdB << ", threshold: " << tpr::subj_17::Config::BSum << std::endl;
+	out << "sum(C) = " << sumProdC << ", threshold: " << tpr::subj_17::Config::CSum << std::endl;
 
 	out << "g1 = " << tpr::subj_17::G1::apply(xOpt) << std::endl;
 	out << "g2 = " << tpr::subj_17::G2::apply(xOpt) << std::endl;

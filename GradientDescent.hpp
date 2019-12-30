@@ -17,9 +17,9 @@ namespace tpr {
 		using VectorT	= typename F::VectorT;
 	public: // == CONSTANTS == 
 		static constexpr ValueType	Epsilon			= 0.0001;
-		static constexpr IndexType	MaxIterations	= 1'00'000;
+		static constexpr IndexType	MaxIterations	= 100'000;
 		static constexpr ValueType	SplitEps		= 0.1f;
-		static constexpr ValueType  SplitDelta		= 0.98f;
+		static constexpr ValueType  SplitDelta		= 0.92f;
 		static constexpr ValueType  Lambda			= 1.0f;
 	public:
 		static VectorT calculate( const VectorT& x0, ValueType lambda, IndexType& it) {

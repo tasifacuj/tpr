@@ -159,6 +159,6 @@ static void test_subj_17_simplified() {
 }
 
 int main() {
-	test_subj_17_simplified();
+	test_subj_17();
 	return 0;
 }

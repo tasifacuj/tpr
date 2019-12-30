@@ -114,25 +114,51 @@ static void test_doc_example() {
 }
 
 static void test_subj_17_simplified() {
-	using PF = tpr::PenaltyFunction<tpr::simplified::Fx, size_t, tpr::simplified::G1, tpr::simplified::G2, tpr::simplified::G3, tpr::simplified::G4>;
+	namespace smp = tpr::subj_17_simplified;
+	using PF = tpr::PenaltyFunction<smp::Fx, size_t, smp::G1, smp::G2, smp::G3, smp::G4, smp::G5, smp::G6, smp::G7, smp::G8, smp::G9>;
 	PF::VectorT x0;
 
 	for (size_t idx = 0; idx < x0.size(); idx++)
-		x0[idx] = 10;
+		x0[idx] = 15;
 
 	PF::VectorT xOpt = PF::evaluate(x0);
-
+	std::ofstream out("x_opt_smp.txt");
 	for (size_t idx = 0; idx < PF::N; idx++) {
-		std::cerr << "x[ " << idx << " ]opt = " << std::round(xOpt[idx]) << '\n';
+		int modelIndex = smp::index_to_model_index_converter[idx];
+		out << "x[ " << modelIndex << " ]_opt = " << xOpt[idx] << " --> " << smp::model_index_to_description_conv[modelIndex] << '\n';
 	}
 
-	std::cerr << "g1 = " << (1.5 * std::round(xOpt[0]) + 0.75 * std::round(xOpt[1]) + 2.5 * std::round(xOpt[2]) - tpr::simplified::Cfg::Resource) << std::endl;
-	std::cerr << "g2 = " << (tpr::simplified::Cfg::Q1 - std::round (xOpt[0] ) ) << std::endl;
-	std::cerr << "g3 = " << (tpr::simplified::Cfg::Q2 - std::round( xOpt[1] ) ) << std::endl;
-	std::cerr << "g4 = " << (tpr::simplified::Cfg::Q3 - std::round( xOpt[2] ) ) << std::endl;
+	PF::ValueType sumProdA = xOpt[smp::model_index_to_index[11]]
+		+ xOpt[smp::model_index_to_index[21]]
+		+ xOpt[smp::model_index_to_index[31]]
+		;
+	PF::ValueType sumProdB = xOpt[smp::model_index_to_index[12]]
+		+ xOpt[smp::model_index_to_index[22]]
+		+ xOpt[smp::model_index_to_index[32]]
+		;
+	PF::ValueType sumProdC = xOpt[smp::model_index_to_index[13]]
+		+ xOpt[smp::model_index_to_index[23]]
+		+ xOpt[smp::model_index_to_index[33]]
+		;
+
+	out << "sum(A) = " << sumProdA << ", threshold: " << smp::Config::ASum << std::endl;
+	out << "sum(B) = " << sumProdB << ", threshold: " << smp::Config::BSum << std::endl;
+	out << "sum(C) = " << sumProdC << ", threshold: " << smp::Config::CSum << std::endl;
+
+	out << "g1 = " << smp::G1::apply(xOpt) << std::endl;
+	out << "g2 = " << smp::G2::apply(xOpt) << std::endl;
+	out << "g3 = " << smp::G3::apply(xOpt) << std::endl;
+	out << "g4 = " << smp::G4::apply(xOpt) << std::endl;
+	out << "g5 = " << smp::G5::apply(xOpt) << std::endl;
+	out << "g6 = " << smp::G6::apply(xOpt) << std::endl;
+
+	out << "g7 = " << smp::G7::apply(xOpt) << std::endl;
+	out << "g8 = " << smp::G8::apply(xOpt) << std::endl;
+	out << "g9 = " << smp::G9::apply(xOpt) << std::endl;
+	out.flush();
 }
 
 int main() {
-	test_subj_17();
+	test_subj_17_simplified();
 	return 0;
 }

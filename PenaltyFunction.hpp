@@ -219,7 +219,7 @@ namespace tpr {
 			using FxRk = FxRkFunction<ValueType, VectorT, TargetF, Alpha>;
 
 			using GradientDescent = StepSplitGradientDescent<FxRk>;
-			//using GradientDescent = FastestGradientDescent<FxRk>;
+//			using GradientDescent = FastestGradientDescent<FxRk>;
 			IndexType idx = 0;
 
 			for (; idx < MaxPIterations; idx++ ) {

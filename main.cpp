@@ -9,6 +9,7 @@
 #include "subj_17.hpp"
 #include "TrainingModel.hpp"
 #include "subj_17_simplified.hpp"
+#include "ConstPenaltyFunction.hpp"
 
 ///**
 //  * f(x) = 10 * x1^2 + x2 ^ 2
@@ -158,8 +159,68 @@ static void test_subj_17_simplified() {
 	out.flush();
 }
 
+static void test_const_impl() {
+	using PF = tpr::ConstPenaltyFunction<double, size_t>;
+	PF::VectorT x0;
+	for (size_t idx = 0; idx < x0.size(); idx++)
+		x0[idx] = 20;
+
+	PF::VectorT xOpt = PF::evaluate(x0);
+	std::ofstream out("x_opt_very_simplified.txt");
+
+	static std::map<int, int> mi_to_i{
+		{ 11, 0 },
+		{ 12, 1 },
+		{ 21, 2 },
+		{ 22, 3 }
+	};
+
+	static std::map<int, std::string> mi_to_descr{
+		{ 11, "factory 1, product A" },
+		{ 12, "factory 1, product B" },
+		{ 21, "factory 2, product A" },
+		{ 22, "factory 2, product B" }
+	};
+
+	static std::map<int, int> i_to_mi{
+		{ 0, 11 },
+		{ 1, 12 },
+		{ 2, 21 },
+		{ 3, 22 }
+	};
+
+	for (size_t idx = 0; idx < PF::N; idx++) {
+		out << "x[ " << i_to_mi[ idx ] << " ]_opt = " << xOpt[idx] << " --> " << mi_to_descr[i_to_mi[idx]] << '\n';
+	}
+
+	/**
+	* x_11 = args[0]
+	* x_12 = args[1]
+	* x_21 = args[2]
+	* x_22 = args[3]
+	*/
+	PF::ValueType sumProdA = xOpt[ 0 ]
+		+ xOpt[2]
+		;
+	PF::ValueType sumProdB = xOpt[ 1 ]
+		+ xOpt[ 3 ]
+		;
+	
+
+	out << "sum(A) = " << sumProdA << ", threshold: " << PF::ASum << std::endl;
+	out << "sum(B) = " << sumProdB << ", threshold: " << PF::BSum << std::endl;
+
+	out << "g1 = " << PF::G1(xOpt) << std::endl;
+	out << "g2 = " << PF::G2(xOpt) << std::endl;
+	out << "g3 = " << PF::G3(xOpt) << std::endl;
+	out << "g4 = " << PF::G4(xOpt) << std::endl;
+	out.flush();
+}
+
 int main() {
-	test_subj_17_simplified();
 	test_subj_17();
+	test_subj_17_simplified();
+	test_const_impl();
+	
 	return 0;
 }

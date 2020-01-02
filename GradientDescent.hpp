@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <cassert>
+#include <iostream>
 
 namespace tpr {
 	/**
@@ -158,6 +159,52 @@ namespace tpr {
 				auto d = std::abs(f1 - f2);
 				assert(it < MaxIterations);
 
+				return currentXVec;
+			}
+	};
+
+
+	template< typename F,
+		typename IndexType = size_t
+	>
+		class ConstStepGradientDescent {
+		public: // == TYPES ==
+			using ValueType = typename F::ValueType;
+			using VectorT = typename F::VectorT;
+		public: // == CONSTANTS == 
+			static constexpr ValueType	Epsilon = 1e-3f;
+			static constexpr IndexType	MaxIterations = 200'000;
+			static constexpr ValueType  Lambda = 0.000001f;
+		public:
+			static VectorT calculate(const VectorT& x0, ValueType lambda, IndexType& it) {
+				IndexType N = F::N;// take num of vars from F
+				VectorT oldXVec;
+				VectorT currentXVec = x0;
+				ValueType diff = 0.0f;
+				ValueType oldDiff = 0.0f;
+
+				for (it = 0; it < MaxIterations; it++) {
+					diff = 0.0f;
+					// save old value
+					oldXVec = currentXVec;
+					// evaluate gradient
+					VectorT gradientVec = F::gradient(currentXVec);
+
+					// evaluate new value
+					for (IndexType j = 0; j < N; j++)
+						currentXVec[j] = currentXVec[j] - lambda * gradientVec[j];
+
+					// evaluate square of gradient norm
+					diff = std::fabs(F::apply(currentXVec) - F::apply(oldXVec));
+					
+					//std::cerr << "diff = " << diff << std::endl;
+					if (diff < Epsilon )
+						return currentXVec;
+
+					oldDiff = diff;
+				}// for
+
+				assert(0 && "Failed");
 				return currentXVec;
 			}
 	};

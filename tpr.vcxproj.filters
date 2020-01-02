@@ -9,5 +9,6 @@
     <ClInclude Include="subj_17.hpp" />
     <ClInclude Include="TrainingModel.hpp" />
     <ClInclude Include="subj_17_simplified.hpp" />
+    <ClInclude Include="ConstPenaltyFunction.hpp" />
   </ItemGroup>
 </Project>

@@ -118,6 +118,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConstPenaltyFunction.hpp" />
     <ClInclude Include="GradientDescent.hpp" />
     <ClInclude Include="PenaltyFunction.hpp" />
     <ClInclude Include="subj_17.hpp" />

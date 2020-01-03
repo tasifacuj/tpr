@@ -200,12 +200,15 @@ static void test_const_impl() {
 	out << "g4 = " << PF::G4(xOpt) << std::endl;
 	out << "g5 = " << PF::G5(xOpt) << std::endl;
 	out << "g6 = " << PF::G6(xOpt) << std::endl;
+	out << "g7 = " << PF::G7(xOpt) << std::endl;
+	out << "g8 = " << PF::G8(xOpt) << std::endl;
+	out << "g9 = " << PF::G9(xOpt) << std::endl;
 	out.flush();
 }
 
 int main() {
-	/*test_subj_17();
-	test_subj_17_simplified();*/
+	//test_subj_17();
+	//test_subj_17_simplified();
 	test_const_impl();
 	
 	return 0;

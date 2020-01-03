@@ -261,8 +261,8 @@ namespace tpr {
 					VectorT xArgs = x0;
 					// prepare new penalty function
 
-					//using GradientDescent = StepSplitGradientDescent<ThisT>;
-					using GradientDescent = ConstStepGradientDescent<ThisT>;
+					using GradientDescent = StepSplitGradientDescent<ThisT>;
+					//using GradientDescent = ConstStepGradientDescent<ThisT>;
 					IndexType idx = 0;
 					ValueType l = GradientDescent::Lambda;
 

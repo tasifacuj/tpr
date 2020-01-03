@@ -22,7 +22,9 @@ namespace tpr {
 
 		static constexpr ValueType	SplitEps		= 0.1f;
 		static constexpr ValueType  SplitDelta		= 0.95f;
-		static constexpr ValueType  Lambda			= 0.00000001f;
+		static constexpr ValueType  Lambda			= 0.0001f;
+		// less lambda matches constdescent
+		// static constexpr ValueType  Lambda                      = 0.00000001f
 	public:
 		static VectorT calculate( const VectorT& x0, ValueType& lambda, IndexType& it) {
 			IndexType N = F::N;// take num of vars from F

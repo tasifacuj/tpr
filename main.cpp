@@ -163,7 +163,7 @@ static void test_const_impl() {
 	using PF = tpr::const_impl::ConstPenaltyFunction<double, size_t>;
 	PF::VectorT x0;
 	for (size_t idx = 0; idx < x0.size(); idx++)
-		x0[idx] = 18.0 ;
+		x0[idx] = 15.0 ;
 
 	PF::VectorT xOpt = PF::evaluate(x0);
 	std::ofstream out("x_opt_very_simplified.txt");

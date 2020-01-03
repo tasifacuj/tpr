@@ -28,8 +28,11 @@ namespace tpr {
 				static constexpr ValueT		FLaplassInverse = 1.282f;
 
 				static constexpr ValueT		Resource1 = 250.0f;
+				static constexpr ValueT		Resource12 = 150.0f;
 				static constexpr ValueT		Resource2 = 100.0f;
+				static constexpr ValueT		Resource22 = 200.0f;
 				static constexpr ValueT		Resource3 = 240.0f * 2;
+				static constexpr ValueT		Resource32 = 300.0f * 2;
 				static constexpr int		PCoef = 2;//!< Power of gi, R1(gi(x)) = max( 0, gi(x) )^P
 				static constexpr int		ASum = 300 / 8;
 				static constexpr int		BSum = 170 / 7;
@@ -111,20 +114,23 @@ namespace tpr {
 						+ 8.0 * xargs[model_index_2_index(31)] + 2.0 * xargs[model_index_2_index(32)] + 5 * xargs[model_index_2_index(33)]
 						+ sC_k * (
 							// g1
-							std::pow(std::max(0.0, 1.5 * xargs[model_index_2_index(11)] + 0.75 * xargs[model_index_2_index(12)]  + 2.5 * xargs[model_index_2_index(13)] 
-								+ FLaplassInverse * std::sqrt(0.083 * Sqr(xargs[model_index_2_index(11)]) + 0.0208 * Sqr(xargs[model_index_2_index(12)]) + 0.83 * Sqr(xargs[model_index_2_index(13)]) ) - Resource1 ), PCoef )
+							std::pow(std::max(0.0, ThisT::G1( xargs ) ), PCoef )
 							// g2
-							+ std::pow(std::max(0.0, 2.0 * xargs[model_index_2_index(21)] + 1.25 * xargs[model_index_2_index(22)] + 4.0 * xargs[ model_index_2_index(23) ] 
-								+ FLaplassInverse * std::sqrt(0.33  * Sqr(xargs[model_index_2_index(21)]) + 0.0208 * Sqr(xargs[model_index_2_index(22)]) + 0.33 * Sqr( xargs[ model_index_2_index(23) ] ) ) - Resource2), PCoef)
+							+ std::pow(std::max(0.0, ThisT::G2(xargs)), PCoef)
 							// g3
-							+ std::pow(std::max(0.0, 2.5 * xargs[model_index_2_index(31)] + 2.0 * xargs[model_index_2_index(32)] + 2.0 * xargs[model_index_2_index(33)]
-								+ FLaplassInverse * std::sqrt(0.75  * Sqr(xargs[model_index_2_index(31)]) + 0.33 * Sqr(xargs[model_index_2_index(32)]) + 0.33 * Sqr(xargs[model_index_2_index(33)])) - Resource3), PCoef)
+							+ std::pow(std::max(0.0, ThisT::G3(xargs)), PCoef)
 							//g4
-							+ std::pow(std::max(0.0, ASum - xargs[model_index_2_index(11)] - xargs[model_index_2_index(21)] - xargs[model_index_2_index(31)]), PCoef)
+							+ std::pow(std::max(0.0, ThisT::G4(xargs)), PCoef)
 							// g5
-							+ std::pow(std::max(0.0, BSum - xargs[model_index_2_index(12)] - xargs[model_index_2_index(22)] - xargs[model_index_2_index(32)]), PCoef)
+							+ std::pow(std::max(0.0, ThisT::G5(xargs)), PCoef)
 							// g6
-							+ std::pow(std::max(0.0, CSum - xargs[model_index_2_index(13)] - xargs[model_index_2_index(23)] - xargs[model_index_2_index(33)]), PCoef)
+							+ std::pow(std::max(0.0, ThisT::G6(xargs)), PCoef)
+							// g7
+							+ std::pow(std::max(0.0, ThisT::G7(xargs)), PCoef)
+							// g8
+							+ std::pow(std::max(0.0, ThisT::G8(xargs)), PCoef)
+							// g9
+							+ std::pow(std::max(0.0, ThisT::G9(xargs)), PCoef)
 							)
 						;
 				}
@@ -137,6 +143,9 @@ namespace tpr {
 					ValueType g4 = ThisT::G4(xargs);
 					ValueType g5 = ThisT::G5(xargs);
 					ValueType g6 = ThisT::G6(xargs);
+					ValueType g7 = ThisT::G7(xargs);
+					ValueType g8 = ThisT::G8(xargs);
+					ValueType g9 = ThisT::G9(xargs);
 
 					ValueType dg1dx11 = 0.0f;
 					ValueType dg1dx12 = 0.0f;
@@ -162,6 +171,18 @@ namespace tpr {
 					ValueType dg6dx23 = 0.0f;
 					ValueType dg6dx33 = 0.0f;
 
+					ValueType dg7dx11 = 0.0;
+					ValueType dg7dx12 = 0.0;
+					ValueType dg7dx13 = 0.0;
+
+					ValueType dg8dx21 = 0.0f;
+					ValueType dg8dx22 = 0.0f;
+					ValueType dg8dx23 = 0.0f;
+
+					ValueType dg9dx31 = 0.0f;
+					ValueType dg9dx32 = 0.0f;
+					ValueType dg9dx33 = 0.0f;
+
 					if (g1 > 0.0) {
 						dg1dx11 = PCoef * std::pow(g1, PCoef - 1)
 							* (1.5 + FLaplassInverse * 0.5 * std::pow(0.083 * Sqr(xargs[model_index_2_index(11)]) + 0.0208 * Sqr(xargs[model_index_2_index(12)]) + 0.083 * Sqr(xargs[model_index_2_index(13)]), -0.5))
@@ -176,6 +197,21 @@ namespace tpr {
 						dg1dx13 = PCoef * std::pow(g1, PCoef - 1)
 							* (2.5 + FLaplassInverse * 0.5 * std::pow(0.083 * Sqr(xargs[model_index_2_index(11)]) + 0.0208 * Sqr(xargs[model_index_2_index(12)]) + 0.083 * Sqr(xargs[model_index_2_index(13)]), -0.5))
 							* 2 * 0.083 * xargs[model_index_2_index(13)]
+							;
+					}
+
+					if (g7 > 0.0f) {
+						dg7dx11 = PCoef * std::pow(g7, PCoef - 1)
+							* ( 3 + FLaplassInverse * 0.5 * std::pow(0.33 * Sqr(xargs[model_index_2_index(11)]) + 0.33 * Sqr(xargs[model_index_2_index(12)]) + 0.33 * Sqr(xargs[model_index_2_index(13)]), -0.5) )
+							* 2 * 0.33 * xargs[ model_index_2_index( 11 )]
+							;
+						dg7dx12 = PCoef * std::pow(g7, PCoef - 1)
+							* (3 + FLaplassInverse * 0.5 * std::pow(0.33 * Sqr(xargs[model_index_2_index(11)]) + 0.33 * Sqr(xargs[model_index_2_index(12)]) + 0.33 * Sqr(xargs[model_index_2_index(13)]), -0.5))
+							* 2 * 0.33 * xargs[model_index_2_index(12)]
+							;
+						dg7dx13 = PCoef * std::pow(g7, PCoef - 1)
+							* (3 + FLaplassInverse * 0.5 * std::pow(0.33 * Sqr(xargs[model_index_2_index(11)]) + 0.33 * Sqr(xargs[model_index_2_index(12)]) + 0.33 * Sqr(xargs[model_index_2_index(13)]), -0.5))
+							* 2 * 0.33 * xargs[model_index_2_index(13)]
 							;
 					}
 
@@ -196,6 +232,23 @@ namespace tpr {
 							;
 					}
 
+					if (g8 > 0.0) {
+						dg8dx21 = PCoef * std::pow(g8, PCoef - 1)
+							* (5.0 + FLaplassInverse * 0.5 * std::pow(1.33  * Sqr(xargs[model_index_2_index(21)]) + 0.083 * Sqr(xargs[model_index_2_index(22)]) + 0.33 * Sqr(xargs[model_index_2_index(23)]), -0.5))
+							* 2.0 * 1.33 * xargs[model_index_2_index(21)]
+							;
+
+						dg8dx22 = PCoef * std::pow(g8, PCoef - 1)
+							* (1.5 + FLaplassInverse * 0.5 * std::pow(1.33  * Sqr(xargs[model_index_2_index(21)]) + 0.083 * Sqr(xargs[model_index_2_index(22)]) + 0.33 * Sqr(xargs[model_index_2_index(23)]), -0.5))
+							* 2.0 * 0.083 * xargs[model_index_2_index(22)]
+							;
+
+						dg8dx23 = PCoef * std::pow(g8, PCoef - 1)
+							* (5.0 + FLaplassInverse * 0.5 * std::pow(1.33  * Sqr(xargs[model_index_2_index(21)]) + 0.083 * Sqr(xargs[model_index_2_index(22)]) + 0.33 * Sqr(xargs[model_index_2_index(23)]), -0.5))
+							* 2.0 * 0.33 * xargs[model_index_2_index(23)]
+							;
+					}
+
 					if (g3 > 0.0) {
 						dg3dx31 = PCoef * std::pow(g3, PCoef - 1)
 							* (2.5 + FLaplassInverse * 0.5 * std::pow(0.75  * Sqr(xargs[model_index_2_index(31)]) + 0.33 * Sqr(xargs[model_index_2_index(32)]) + 0.33 * Sqr(xargs[model_index_2_index(33)]), -0.5) )
@@ -211,6 +264,25 @@ namespace tpr {
 							* 2.0 * 0.33 * xargs[model_index_2_index(33)]
 							;
 					}
+
+
+					if (g9 > 0.0) {
+						dg9dx31 = PCoef * std::pow(g9, PCoef - 1)
+							* (4.0 + FLaplassInverse * 0.5 * std::pow(1.33  * Sqr(xargs[model_index_2_index(31)]) + 0.33 * Sqr(xargs[model_index_2_index(32)]) + 0.33 * Sqr(xargs[model_index_2_index(33)]), -0.5))
+							* 2.0 * 1.33 * xargs[model_index_2_index(31)]
+							;
+						dg9dx32 = PCoef * std::pow(g9, PCoef - 1)
+							* (4.0 + FLaplassInverse * 0.5 * std::pow(1.33  * Sqr(xargs[model_index_2_index(31)]) + 0.33 * Sqr(xargs[model_index_2_index(32)]) + 0.33 * Sqr(xargs[model_index_2_index(33)]), -0.5))
+							* 2.0 * 0.33 * xargs[model_index_2_index(32)]
+							;
+
+						dg9dx33 = PCoef * std::pow(g9, PCoef - 1)
+							* (7.0 + FLaplassInverse * 0.5 * std::pow(1.33  * Sqr(xargs[model_index_2_index(31)]) + 0.33 * Sqr(xargs[model_index_2_index(32)]) + 0.33 * Sqr(xargs[model_index_2_index(33)]), -0.5))
+							* 2.0 * 0.33 * xargs[model_index_2_index(33)]
+							;
+					}
+
+					
 
 					if (g4 > 0.0) {
 						dg4dx11 = -2.0 * g4;
@@ -230,17 +302,17 @@ namespace tpr {
 						dg6dx33 = -2.0 * g6;
 					}
 
-					ValueType dQdx11 = 3.0 + sC_k * (dg1dx11 + dg4dx11);
-					ValueType dQdx12 = 9.0 + sC_k * (dg1dx12 + dg5dx12);
-					ValueType dQdx13 = 5.0 + sC_k * (dg1dx13 + dg6dx13);
+					ValueType dQdx11 = 3.0 + sC_k * (dg1dx11 + dg7dx11 + dg4dx11);
+					ValueType dQdx12 = 9.0 + sC_k * (dg1dx12 + dg7dx12 + dg5dx12);
+					ValueType dQdx13 = 5.0 + sC_k * (dg1dx13 + dg7dx13 + dg6dx13);
 
-					ValueType dQdx21 = 3.0 + sC_k * (dg2dx21 + dg4dx21);
-					ValueType dQdx22 = 6.0 + sC_k * (dg2dx22 + dg5dx22);
-					ValueType dQdx23 = 8.0 + sC_k * (dg2dx23 + dg6dx23 );
+					ValueType dQdx21 = 3.0 + sC_k * (dg2dx21 + dg8dx21 + dg4dx21);
+					ValueType dQdx22 = 6.0 + sC_k * (dg2dx22 + dg8dx22 + dg5dx22);
+					ValueType dQdx23 = 8.0 + sC_k * (dg2dx23 + dg8dx23 + dg6dx23 );
 
-					ValueType dQdx31 = 8.0 + sC_k * (dg3dx31 + dg4dx31);
-					ValueType dQdx32 = 2.0 + sC_k * (dg3dx32 + dg5dx32);
-					ValueType dQdx33 = 5.0 + sC_k * (dg3dx33 + dg6dx33);
+					ValueType dQdx31 = 8.0 + sC_k * (dg3dx31 + dg9dx31 + dg4dx31);
+					ValueType dQdx32 = 2.0 + sC_k * (dg3dx32 + dg9dx32 + dg5dx32);
+					ValueType dQdx33 = 5.0 + sC_k * (dg3dx33 + dg9dx33 + dg6dx33);
 
 					/**
 					{ 11, 0 },
@@ -315,6 +387,21 @@ namespace tpr {
 
 				static ValueType G6(const VectorT& xargs) {
 					return CSum - xargs[model_index_2_index(13)] - xargs[model_index_2_index(23)] - xargs[model_index_2_index(33)];
+				}
+
+				static ValueType G7(const VectorT& xargs) {
+					return  3.0 * xargs[model_index_2_index(11)] + 3.0 * xargs[model_index_2_index(12)] + 3.0 * xargs[model_index_2_index(13)]
+						+ FLaplassInverse * sqrt(0.33 * Sqr(xargs[model_index_2_index(11)]) + 0.33 * Sqr(xargs[model_index_2_index(12)]) + 0.33 * Sqr(xargs[model_index_2_index(13)])) - Resource12;
+				}
+
+				static ValueType G8(const VectorT& xargs) {
+					return  5.0 * xargs[model_index_2_index(21)] + 1.5 * xargs[model_index_2_index(22)] + 5.0 * xargs[model_index_2_index(23)]
+						+ FLaplassInverse * sqrt(1.33 * Sqr(xargs[model_index_2_index(21)]) + 0.083 * Sqr(xargs[model_index_2_index(22)]) + 0.33 * Sqr(xargs[model_index_2_index(23)])) - Resource22;
+				}
+
+				static ValueType G9(const VectorT& xargs) {
+					return  4.0 * xargs[model_index_2_index(31)] + 4.0 * xargs[model_index_2_index(32)] + 7.0 * xargs[model_index_2_index(33)]
+						+ FLaplassInverse * sqrt(1.33 * Sqr(xargs[model_index_2_index(31)]) + 0.33 * Sqr(xargs[model_index_2_index(32)]) + 0.33 * Sqr(xargs[model_index_2_index(33)])) - Resource32;
 				}
 		};
 

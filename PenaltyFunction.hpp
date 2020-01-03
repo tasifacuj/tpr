@@ -226,7 +226,8 @@ namespace tpr {
 				IndexType it = 0;
 
 				// find min( F(x, rk) )
-				VectorT xOptLoc = GradientDescent::calculate(xArgs, GradientDescent::Lambda, it);
+				ValueType l = GradientDescent::Lambda;
+				VectorT xOptLoc = GradientDescent::calculate(xArgs, l, it);
 				ValueType eps = std::fabs(TargetF::apply(xOptLoc) - TargetF::apply(xArgs));
 
 				if (eps <= Epsilon) {

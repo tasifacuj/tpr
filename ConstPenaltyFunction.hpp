@@ -264,12 +264,13 @@ namespace tpr {
 					//using GradientDescent = StepSplitGradientDescent<ThisT>;
 					using GradientDescent = ConstStepGradientDescent<ThisT>;
 					IndexType idx = 0;
+					ValueType l = GradientDescent::Lambda;
 
 					for (; idx < MaxPIterations; idx++) {
 						IndexType it = 0;
 
 						// find min( F(x, rk) )
-						VectorT xOptLoc = GradientDescent::calculate(xArgs, GradientDescent::Lambda, it);
+						VectorT xOptLoc = GradientDescent::calculate(xArgs, l, it);
 						ValueType eps = std::fabs(ThisT::apply(xOptLoc) - ThisT::apply(xArgs));
 
 						if (eps <= Epsilon) {

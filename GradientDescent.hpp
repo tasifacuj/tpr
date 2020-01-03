@@ -17,20 +17,23 @@ namespace tpr {
 		using ValueType = typename F::ValueType;
 		using VectorT	= typename F::VectorT;
 	public: // == CONSTANTS == 
-		static constexpr ValueType	Epsilon			= 0.0001;
-		static constexpr IndexType	MaxIterations	= 100'000;
+		static constexpr ValueType	Epsilon			= 1e-2f;
+		static constexpr IndexType	MaxIterations	= 300'000;
+
 		static constexpr ValueType	SplitEps		= 0.1f;
-		static constexpr ValueType  SplitDelta		= 0.98f;
-		static constexpr ValueType  Lambda			= 1.0f;
+		static constexpr ValueType  SplitDelta		= 0.95f;
+		static constexpr ValueType  Lambda			= 0.00000001f;
 	public:
-		static VectorT calculate( const VectorT& x0, ValueType lambda, IndexType& it) {
+		static VectorT calculate( const VectorT& x0, ValueType& lambda, IndexType& it) {
 			IndexType N = F::N;// take num of vars from F
 			VectorT oldXVec;
 			VectorT currentXVec = x0;
 			// || grad( f( x[k] ) )||^2
 			ValueType squaredNorm = 0.0f;
+			ValueType diff = 0.0f;
 
 			for (it = 0; it < MaxIterations; it++) {
+				diff = 0.0f;
 				// save old value
 				oldXVec = currentXVec;
 				// evaluate gradient
@@ -56,7 +59,7 @@ namespace tpr {
 						currentXVec[j] = currentXVec[j] - lambda * gradientVec[j];
 				}
 
-				ValueType diff = std::fabs(F::apply(currentXVec) - F::apply(oldXVec));
+				diff = std::fabs(F::apply(currentXVec) - F::apply(oldXVec));
 				
 				if(diff < Epsilon)
 					return currentXVec;
@@ -137,7 +140,7 @@ namespace tpr {
 				return buffer;
 			}
 
-			static VectorT calculate(const VectorT& x0, ValueType, IndexType& it) {
+			static VectorT calculate(const VectorT& x0, ValueType&, IndexType& it) {
 				IndexType N = F::N;// take num of vars from F
 				VectorT oldXVec;
 				VectorT currentXVec = x0;
@@ -173,7 +176,7 @@ namespace tpr {
 			static constexpr IndexType	MaxIterations = 300'000;
 			static constexpr ValueType  Lambda = 0.00000001f;
 		public:
-			static VectorT calculate(const VectorT& x0, ValueType lambda, IndexType& it) {
+			static VectorT calculate(const VectorT& x0, ValueType& lambda, IndexType& it) {
 				IndexType N = F::N;// take num of vars from F
 				VectorT oldXVec;
 				VectorT currentXVec = x0;

@@ -160,66 +160,52 @@ static void test_subj_17_simplified() {
 }
 
 static void test_const_impl() {
-	using PF = tpr::ConstPenaltyFunction<double, size_t>;
+	using PF = tpr::const_impl::ConstPenaltyFunction<double, size_t>;
 	PF::VectorT x0;
 	for (size_t idx = 0; idx < x0.size(); idx++)
-		x0[idx] = 20;
+		x0[idx] = 15.0;
 
 	PF::VectorT xOpt = PF::evaluate(x0);
 	std::ofstream out("x_opt_very_simplified.txt");
 
-	static std::map<int, int> mi_to_i{
-		{ 11, 0 },
-		{ 12, 1 },
-		{ 21, 2 },
-		{ 22, 3 }
-	};
-
-	static std::map<int, std::string> mi_to_descr{
-		{ 11, "factory 1, product A" },
-		{ 12, "factory 1, product B" },
-		{ 21, "factory 2, product A" },
-		{ 22, "factory 2, product B" }
-	};
-
-	static std::map<int, int> i_to_mi{
-		{ 0, 11 },
-		{ 1, 12 },
-		{ 2, 21 },
-		{ 3, 22 }
-	};
 
 	for (size_t idx = 0; idx < PF::N; idx++) {
-		out << "x[ " << i_to_mi[ idx ] << " ]_opt = " << xOpt[idx] << " --> " << mi_to_descr[i_to_mi[idx]] << '\n';
+		int mi = PF::idx_to_model_idx(idx);
+		out << "x[ " << mi << " ]_opt = " << xOpt[idx] << " --> " << PF::model_idx_to_descr( mi ) << '\n';
 	}
 
-	/**
-	* x_11 = args[0]
-	* x_12 = args[1]
-	* x_21 = args[2]
-	* x_22 = args[3]
-	*/
-	PF::ValueType sumProdA = xOpt[ 0 ]
-		+ xOpt[2]
-		;
-	PF::ValueType sumProdB = xOpt[ 1 ]
-		+ xOpt[ 3 ]
+
+	PF::ValueType sumProdA = xOpt[ PF::model_index_2_index(11) ]
+		+ xOpt[PF::model_index_2_index(21)]
+		+ xOpt[PF::model_index_2_index(31)]
 		;
 	
+	PF::ValueType sumProdB = xOpt[ PF::model_index_2_index(12) ]
+		+ xOpt[PF::model_index_2_index(22)]
+		+ xOpt[PF::model_index_2_index(32)]
+		;
+	
+	PF::ValueType sumProdC = xOpt[PF::model_index_2_index(13)]
+		+ xOpt[PF::model_index_2_index(23)]
+		+ xOpt[PF::model_index_2_index(33)]
+		;
 
 	out << "sum(A) = " << sumProdA << ", threshold: " << PF::ASum << std::endl;
 	out << "sum(B) = " << sumProdB << ", threshold: " << PF::BSum << std::endl;
+	out << "sum(C) = " << sumProdC << ", threshold: " << PF::CSum << std::endl;
 
 	out << "g1 = " << PF::G1(xOpt) << std::endl;
 	out << "g2 = " << PF::G2(xOpt) << std::endl;
 	out << "g3 = " << PF::G3(xOpt) << std::endl;
 	out << "g4 = " << PF::G4(xOpt) << std::endl;
+	out << "g5 = " << PF::G5(xOpt) << std::endl;
+	out << "g6 = " << PF::G6(xOpt) << std::endl;
 	out.flush();
 }
 
 int main() {
-	test_subj_17();
-	test_subj_17_simplified();
+	/*test_subj_17();
+	test_subj_17_simplified();*/
 	test_const_impl();
 	
 	return 0;

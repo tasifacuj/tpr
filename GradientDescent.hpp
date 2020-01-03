@@ -35,9 +35,6 @@ namespace tpr {
 				oldXVec = currentXVec;
 				// evaluate gradient
 				VectorT gradientVec = F::gradient(currentXVec);
-				auto f1 = F::apply(currentXVec);
-
-				bool tmp = false;
 				// evaluate new value
 				for (IndexType j = 0; j < N; j++)
 					currentXVec[j] = currentXVec[j] - lambda * gradientVec[j];
@@ -172,9 +169,9 @@ namespace tpr {
 			using ValueType = typename F::ValueType;
 			using VectorT = typename F::VectorT;
 		public: // == CONSTANTS == 
-			static constexpr ValueType	Epsilon = 1e-3f;
-			static constexpr IndexType	MaxIterations = 200'000;
-			static constexpr ValueType  Lambda = 0.000001f;
+			static constexpr ValueType	Epsilon = 1e-2f;
+			static constexpr IndexType	MaxIterations = 300'000;
+			static constexpr ValueType  Lambda = 0.00000001f;
 		public:
 			static VectorT calculate(const VectorT& x0, ValueType lambda, IndexType& it) {
 				IndexType N = F::N;// take num of vars from F

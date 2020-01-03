@@ -207,8 +207,8 @@ static void test_const_impl() {
 }
 
 int main() {
-	//test_subj_17();
-	//test_subj_17_simplified();
+	test_subj_17();
+	test_subj_17_simplified();
 	test_const_impl();
 	
 	return 0;

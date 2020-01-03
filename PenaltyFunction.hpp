@@ -83,30 +83,30 @@ namespace tpr {
 
 			static VecT gradient(const VecT& xArgs) {
 				ValueT f = G::apply(xArgs);
-				ValueT v = std::pow(std::max(0.0, 1.0 * f), PParam);
-				VecT g;
-				memset(&g[0], 0, sizeof(ValueT) * g.size());
+				//ValueT v = std::pow(std::max(0.0, 1.0 * f), PParam);
+				VecT ret;
+				memset(&ret[0], 0, sizeof(ValueT) * ret.size());
 
-				if (v > 0) {
+				if (f > 0) {
 					/**
 					 * f(x) = (x1 + x2 - 7 )^3
 					 * dfdx1 = 3*(x1+x2 - 7)^2 * (x1+x2 - 7)' = 3*(x1+x2 - 7)^2 * 1
 					 */
-					g = G::gradient(xArgs);
+					VecT g = G::gradient(xArgs);
 					
 					for (IndexType idx = 0; idx < g.size(); idx++) {
-						g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * g[idx];
+						ret[idx] = PParam * std::pow(1.0 * f, PParam - 1) * g[idx];
 						//g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * std::pow(g[idx], PParam -1);
 					}
 				}
 				
 				VecT tailGrad = Tail::gradient(xArgs);
 
-				for (IndexType idx = 0; idx < g.size(); idx++) {
-					g[idx] += tailGrad[idx];
+				for (IndexType idx = 0; idx < ret.size(); idx++) {
+					ret[idx] += tailGrad[idx];
 				}
 
-				return g;
+				return ret;
 			}
 		};
 
@@ -119,11 +119,11 @@ namespace tpr {
 
 			static VecT gradient(const VecT& xArgs) {
 				ValueT f = G::apply(xArgs);
-				ValueT v = std::pow(std::max(0.0, 1.0 * f), PParam);
-				VecT g;
-				memset(&g[0], 0, sizeof(ValueT) * g.size());
+				//ValueT v = std::pow(std::max(0.0, 1.0 * f), PParam);
+				VecT ret;
+				memset(&ret[0], 0, sizeof(ValueT) * ret.size());
 
-				if (v > 0) {
+				if (f > 0) {
 					/**
 					 * f(x) = (x1 + x2 - 7 )^3
 					 * dfdx1 = 3*(x1+x2 - 7)^2 * (x1+x2 - 7)' = 3*(x1+x2 - 7)^2 * 1
@@ -131,12 +131,12 @@ namespace tpr {
 					VecT g = G::gradient(xArgs);
 
 					for (IndexType idx = 0; idx < g.size(); idx++) {
-						g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * g[idx];
+						ret[idx] = PParam * std::pow(1.0 * f, PParam - 1) * g[idx];
 						//g[idx] = PParam * std::pow(1.0 * f, PParam - 1) * std::pow(g[idx], PParam -1);
 					}
 				}
 
-				return g;
+				return ret;
 			}
 		};
 

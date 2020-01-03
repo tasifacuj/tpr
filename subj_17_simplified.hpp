@@ -62,16 +62,16 @@ namespace tpr {
 			static constexpr int BSum = 100;
 			static constexpr int CSum = 30;*/
 
-			static constexpr int Resource11 = 300;			// R1
-			static constexpr int Resource12 = 150 * 2;		// R2
-			static constexpr int Resource21 = 100 * 3;		// R3
-			static constexpr int Resource22 = 200 * 2;		// R4
-			static constexpr int Resource31 = 240 * 1.0;	// R5
-			static constexpr float Resource32 = 339.7f ;	// R6
+			static constexpr int Resource11 = 250 * 8;			// R1
+			static constexpr int Resource12 = 150 * 8;		// R2
+			static constexpr int Resource21 = 100 * 8;		// R3
+			static constexpr int Resource22 = 200 * 8;		// R4
+			static constexpr int Resource31 = 240 * 8.0;	// R5
+			static constexpr float Resource32 = 300 * 8 ;	// R6
 
-			static constexpr int ASum = 100;				
-			static constexpr int BSum = 70;
-			static constexpr int CSum = 20;
+			static constexpr int ASum = 300;				
+			static constexpr int BSum = 170;
+			static constexpr int CSum = 250;
 		};
 
 
@@ -84,7 +84,9 @@ namespace tpr {
 			using VectorT = std::array<ValueType, N>;
 
 			static ValueType apply(const VectorT& args) {
-				return 3 * args[ 0 ] + 9 * args[ 1 ] + 5 * args[ 2 ] + 3 * args[3] + 6 * args[4] + 8 * args[5] + 8 * args[6] + 2 * args[7] + 5 * args[7];
+				return 3 * args[model_index_to_index[11]] + 9 * args[model_index_to_index[12]] + 5 * args[model_index_to_index[13]]
+					+ 3 * args[model_index_to_index[21]] + 6 * args[model_index_to_index[22]] + 8 * args[model_index_to_index[23]]
+					+ 8 * args[model_index_to_index[31]] + 2 * args[model_index_to_index[32]] + 5 * args[model_index_to_index[33]];
 			}
 
 			static VectorT gradient(const VectorT&) {

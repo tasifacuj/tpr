@@ -50,7 +50,7 @@ static void test_subj_17(){
 	PF::VectorT x0;
 
 	for (size_t idx = 0; idx < x0.size(); idx++)
-		x0[idx] = 5;
+		x0[idx] = 18;
 
 	PF::VectorT xOpt = PF::evaluate(x0);
 	std::ofstream out("x_opt.txt");
@@ -208,8 +208,8 @@ static void test_const_impl() {
 
 int main() {
 	test_subj_17();
-	test_subj_17_simplified();
-	test_const_impl();
+	//test_subj_17_simplified();
+	//test_const_impl();
 	
 	return 0;
 }

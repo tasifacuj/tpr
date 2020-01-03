@@ -95,12 +95,12 @@ namespace tpr {
 			static constexpr float Multiplier = 1.0f;
 			static constexpr double FLaplassInverse = 1.282;
 			
-			static constexpr int Resource11 = 250 * 8;			// R1
-			static constexpr int Resource12 = 150 * 8;		// R2
-			static constexpr int Resource21 = 100 * 8;		// R3
-			static constexpr int Resource22 = 200 * 8;		// R4
-			static constexpr int Resource31 = 240 * 8.0;	// R5
-			static constexpr float Resource32 = 300 * 8;	// R6
+			static constexpr int Resource11 = 250 * 3.0;			// R1
+			static constexpr int Resource12 = 150 * 3.0;		// R2
+			static constexpr int Resource21 = 100 * 3.0;		// R3
+			static constexpr int Resource22 = 200 * 3.0;		// R4
+			static constexpr int Resource31 = 240 * 3.0;	// R5
+			static constexpr float Resource32 = 300 * 3.0;	// R6
 
 			static constexpr int ASum = 300;
 			static constexpr int BSum = 170;

@@ -27,12 +27,12 @@ namespace tpr {
 				static constexpr IndexType	MaxPIterations = 100'000;
 				static constexpr ValueT		FLaplassInverse = 1.282f;
 
-				static constexpr ValueT		Resource1 = 250.0f * 8;
-				static constexpr ValueT		Resource12 = 150.0f * 8;
-				static constexpr ValueT		Resource2 = 100.0f * 8;
-				static constexpr ValueT		Resource22 = 200.0f * 8;
-				static constexpr ValueT		Resource3 = 240.0f * 8;
-				static constexpr ValueT		Resource32 = 300.0f * 8;
+				static constexpr ValueT		Resource1 = 250.0f * 4;
+				static constexpr ValueT		Resource12 = 150.0f * 4;
+				static constexpr ValueT		Resource2 = 100.0f * 4;
+				static constexpr ValueT		Resource22 = 200.0f * 4;
+				static constexpr ValueT		Resource3 = 240.0f * 4;
+				static constexpr ValueT		Resource32 = 300.0f * 4;
 				static constexpr int		PCoef = 2;//!< Power of gi, R1(gi(x)) = max( 0, gi(x) )^P
 				static constexpr int		ASum = 300;
 				static constexpr int		BSum = 170;

@@ -17,7 +17,7 @@ namespace tpr {
 		using ValueType = typename F::ValueType;
 		using VectorT	= typename F::VectorT;
 	public: // == CONSTANTS == 
-		static constexpr ValueType	Epsilon			= 1e-2f;
+		static constexpr ValueType	Epsilon			= 0.1f;
 		static constexpr IndexType	MaxIterations	= 300'000;
 
 		static constexpr ValueType	SplitEps		= 0.1f;

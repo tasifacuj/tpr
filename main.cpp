@@ -186,7 +186,9 @@ static void test_subj_17_p4(std::string result_name, size_t startx = 24) {
 	out << "g4 = " << tpr::subj_17_p4::G4<CfgParam>::apply(xOpt) << std::endl;
 	out << "g5 = " << tpr::subj_17_p4::G5<CfgParam>::apply(xOpt) << std::endl;
 	out << "g6 = " << tpr::subj_17_p4::G6<CfgParam>::apply(xOpt) << std::endl;
-
+	out << "g7 = " << tpr::subj_17_p4::G7<CfgParam>::apply(xOpt) << std::endl;
+	out << "g8 = " << tpr::subj_17_p4::G8<CfgParam>::apply(xOpt) << std::endl;
+	out << "g9 = " << tpr::subj_17_p4::G9<CfgParam>::apply(xOpt) << std::endl;
 	out.flush();
 }
 
@@ -208,7 +210,7 @@ static void test_doc_example() {
 int main() {
 	
 	// 1. Try to find optimal solution for given constraints.
-	//test_subj_17<tpr::subj_17::Config0>("x_opt.txt", 15);
+	test_subj_17<tpr::subj_17::Config0>("x_opt.txt", 15);
 	//// 2. Let all resources were incresed 3 times.
 	test_subj_17<tpr::subj_17::Config2ResourceChanged>( "x_opt2.txt" );
 	// 3. add 4-th product.
